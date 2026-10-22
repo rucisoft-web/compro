@@ -47,6 +47,8 @@ Seeder berisi konten dari rucisoft.id. Dua item katalog bertanda "(contoh)" hany
 4. Jalankan `php artisan migrate --seed --force`, `php artisan storage:link`, `php artisan filament:optimize`, dan `php artisan optimize`.
 5. Jalankan `npm ci && npm run build` (atau build di lokal lalu upload folder `public/build`).
 
+Panduan khusus cPanel ada di [DEPLOY-CPANEL.md](DEPLOY-CPANEL.md).
+
 ## Testing
 
 ```bash
