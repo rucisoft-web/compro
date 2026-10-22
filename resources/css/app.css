@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/plus-jakarta-sans';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-navy-50: #eef4fa;
+    --color-navy-100: #d6e3f0;
+    --color-navy-700: #123a63;
+    --color-navy-800: #0e3054;
+    --color-navy-900: #0b2a4a;
+    --color-navy-950: #071a2e;
+    --color-brand-50: #e9f8f6;
+    --color-brand-100: #c9eee8;
+    --color-brand-400: #34d3b4;
+    --color-brand-500: #14b096;
+    --color-brand-600: #0e7c86;
+    --color-brand-700: #0b6570;
+}
+
+@utility container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition;
+}
+
+@utility btn-primary {
+    @apply btn bg-brand-600 text-white shadow-lg shadow-brand-600/20 hover:bg-brand-700;
+}
+
+@utility btn-outline {
+    @apply btn border border-navy-100 bg-white text-navy-900 hover:border-brand-500 hover:text-brand-700;
+}
+
+@utility btn-wa {
+    @apply btn bg-[#25D366] text-white shadow-lg shadow-green-600/20 hover:bg-[#1ebe5b];
+}
+
+@utility eyebrow {
+    @apply text-xs font-bold tracking-[0.2em] text-brand-600 uppercase;
+}
+
+@layer components {
+    .prose-content p {
+        @apply mb-4 leading-relaxed text-slate-600;
+    }
+
+    .prose-content ul {
+        @apply mb-4 list-disc space-y-1 pl-5 text-slate-600;
+    }
+
+    .prose-content ol {
+        @apply mb-4 list-decimal space-y-1 pl-5 text-slate-600;
+    }
+
+    .prose-content h2,
+    .prose-content h3 {
+        @apply mt-6 mb-3 font-bold text-navy-900;
+    }
+
+    .prose-content a {
+        @apply text-brand-600 underline;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}

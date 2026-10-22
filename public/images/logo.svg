@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" role="img" aria-label="Rucisoft Indonesia">
+  <defs>
+    <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B2A4A"/>
+      <stop offset="1" stop-color="#0E7C86"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#rg)"/>
+  <path d="M19 47V17h14.5a9.5 9.5 0 0 1 0 19H19" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M31 36l10 11" fill="none" stroke="#34D3B4" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="47" cy="19" r="4" fill="#34D3B4"/>
+  <text x="78" y="38" font-family="Plus Jakarta Sans, Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#0B2A4A" letter-spacing="-0.5">Rucisoft</text>
+  <text x="79" y="56" font-family="Plus Jakarta Sans, Inter, Arial, sans-serif" font-size="11" font-weight="600" fill="#0E7C86" letter-spacing="3.2">INDONESIA</text>
+</svg>
