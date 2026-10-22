@@ -21,6 +21,7 @@ class CatalogItemsTable
             ->reorderable('sort_order')
             ->columns([
                 ImageColumn::make('cover_image')
+                    ->disk('public')
                     ->label('Sampul'),
                 TextColumn::make('title')
                     ->label('Judul')

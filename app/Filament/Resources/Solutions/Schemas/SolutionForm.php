@@ -68,6 +68,7 @@ class SolutionForm
                         FileUpload::make('image')
                             ->label('Gambar / screenshot')
                             ->image()
+                            ->disk('public')
                             ->directory('solutions'),
                         TextInput::make('sort_order')
                             ->label('Urutan')

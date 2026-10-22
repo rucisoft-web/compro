@@ -2,7 +2,7 @@
 <article class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-xl hover:shadow-navy-900/5">
     <a href="{{ route('catalog.show', $item) }}" class="relative block aspect-[16/9] overflow-hidden bg-gradient-to-br from-navy-900 to-brand-600">
         @if ($item->cover_image)
-            <img src="{{ Storage::url($item->cover_image) }}" alt="{{ $item->title }}" class="size-full object-cover transition group-hover:scale-105" loading="lazy">
+            <img src="{{ Storage::disk('public')->url($item->cover_image) }}" alt="{{ $item->title }}" class="size-full object-cover transition group-hover:scale-105" loading="lazy">
         @else
             <div class="flex size-full items-center justify-center">
                 <x-dynamic-component :component="$typeIcon" class="size-14 text-white/80" />

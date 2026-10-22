@@ -24,7 +24,7 @@
             </div>
             <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-navy-900/5">
                 @if ($solution->image)
-                    <img src="{{ Storage::url($solution->image) }}" alt="{{ $solution->name }}" class="mb-6 w-full rounded-2xl">
+                    <img src="{{ Storage::disk('public')->url($solution->image) }}" alt="{{ $solution->name }}" class="mb-6 w-full rounded-2xl">
                 @endif
                 <p class="text-sm font-bold text-navy-900">Fitur utama</p>
                 <ul class="mt-4 space-y-3">

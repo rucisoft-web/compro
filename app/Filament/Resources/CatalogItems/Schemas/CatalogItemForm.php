@@ -72,6 +72,7 @@ class CatalogItemForm
                         FileUpload::make('cover_image')
                             ->label('Gambar sampul')
                             ->image()
+                            ->disk('public')
                             ->directory('catalog'),
                         Textarea::make('whatsapp_message')
                             ->label('Pesan WhatsApp otomatis')

@@ -21,7 +21,7 @@
             <aside class="lg:col-span-2">
                 <div class="sticky top-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-navy-900/5">
                     @if ($item->cover_image)
-                        <img src="{{ Storage::url($item->cover_image) }}" alt="{{ $item->title }}" class="aspect-[4/3] w-full object-cover">
+                        <img src="{{ Storage::disk('public')->url($item->cover_image) }}" alt="{{ $item->title }}" class="aspect-[4/3] w-full object-cover">
                     @endif
                     <div class="space-y-4 p-6">
                         @if ($item->solution)
