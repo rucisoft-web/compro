@@ -70,26 +70,43 @@
         <div class="container-page">
             <div class="max-w-2xl">
                 <p class="eyebrow">Solusi</p>
-                <h2 class="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">Enam solusi fokus Rucisoft</h2>
-                <p class="mt-4 text-slate-600">Software terpadu untuk mengendalikan strategi, kepatuhan, keberlanjutan, layanan korporat, TI, dan pengetahuan perusahaan.</p>
+                <h2 class="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">Produk aplikasi Rucisoft</h2>
+                <p class="mt-4 text-slate-600">Aplikasi siap pakai untuk strategi perusahaan, akreditasi perguruan tinggi, fasilitas kantor, kantor notaris, klinik, hingga rapat Direksi dan Dewan Komisaris.</p>
             </div>
 
             <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($solutions as $solution)
-                    <article class="group flex flex-col rounded-2xl border border-slate-200 p-6 transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-xl hover:shadow-navy-900/5">
-                        <div class="flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-navy-900 to-brand-600 text-white">
-                            <x-dynamic-component :component="$solution->icon ?: 'heroicon-o-squares-2x2'" class="size-6" />
-                        </div>
-                        <h3 class="mt-5 text-lg font-bold text-navy-900">{{ $solution->name }}</h3>
-                        <p class="mt-2 text-sm text-slate-600">{{ $solution->tagline }}</p>
-                        <ul class="mt-5 flex-1 space-y-2 text-sm text-slate-700">
-                            @foreach ($solution->features ?? [] as $feature)
-                                <li class="flex gap-2"><x-heroicon-o-check-circle class="mt-0.5 size-4 shrink-0 text-brand-500" /> {{ $feature }}</li>
-                            @endforeach
-                        </ul>
-                        <a href="{{ route('solutions.show', $solution) }}" class="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 group-hover:gap-2">
-                            Lihat penawaran <x-heroicon-o-arrow-right class="size-4 transition-all" />
+                    @php($fallbackImage = $solution->fallbackImageUrl())
+                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-xl hover:shadow-navy-900/5">
+                        <a href="{{ route('solutions.show', $solution) }}" class="relative block aspect-[16/9] overflow-hidden bg-gradient-to-br from-navy-900 to-brand-600">
+                            @if ($solution->imageUrl())
+                                <img src="{{ $solution->imageUrl() }}" alt="Tampilan {{ $solution->name }}" loading="lazy"
+                                     class="size-full object-cover object-top transition duration-500 group-hover:scale-105"
+                                     @if ($fallbackImage) onerror="this.onerror=null;this.src='{{ $fallbackImage }}'" @endif>
+                            @endif
                         </a>
+                        <div class="flex flex-1 flex-col p-6">
+                            <div class="relative z-10 -mt-14 mb-4 flex size-16 items-center justify-center rounded-2xl border border-slate-100 bg-white p-2.5 shadow-lg">
+                                @include('partials.product-logo', ['solution' => $solution, 'class' => 'size-11'])
+                            </div>
+                            <h3 class="text-lg font-bold text-navy-900">{{ $solution->name }}</h3>
+                            <p class="mt-2 text-sm text-slate-600">{{ $solution->tagline }}</p>
+                            <ul class="mt-5 flex-1 space-y-2 text-sm text-slate-700">
+                                @foreach (array_slice($solution->features ?? [], 0, 4) as $feature)
+                                    <li class="flex gap-2"><x-heroicon-o-check-circle class="mt-0.5 size-4 shrink-0 text-brand-500" /> {{ $feature }}</li>
+                                @endforeach
+                            </ul>
+                            <div class="mt-6 flex items-center justify-between gap-3">
+                                <a href="{{ route('solutions.show', $solution) }}" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 group-hover:gap-2">
+                                    Lihat detail <x-heroicon-o-arrow-right class="size-4 transition-all" />
+                                </a>
+                                @if ($solution->website_url)
+                                    <a href="{{ $solution->website_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-sm font-semibold text-slate-500 hover:text-navy-900">
+                                        Coba demo <x-heroicon-o-arrow-top-right-on-square class="size-4" />
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
                     </article>
                 @endforeach
             </div>

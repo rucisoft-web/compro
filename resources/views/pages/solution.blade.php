@@ -10,8 +10,8 @@
                 <a href="{{ route('home') }}#solusi" class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-brand-600">
                     <x-heroicon-o-arrow-left class="size-4" /> Semua solusi
                 </a>
-                <div class="mt-6 flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-navy-900 to-brand-600 text-white">
-                    <x-dynamic-component :component="$solution->icon ?: 'heroicon-o-squares-2x2'" class="size-7" />
+                <div class="mt-6 flex size-16 items-center justify-center rounded-2xl border border-slate-100 bg-white p-2.5 shadow-lg">
+                    @include('partials.product-logo', ['solution' => $solution, 'class' => 'size-11'])
                 </div>
                 <h1 class="mt-5 text-4xl font-extrabold tracking-tight text-navy-900 sm:text-5xl">{{ $solution->name }}</h1>
                 <p class="mt-4 text-lg text-slate-600">{{ $solution->tagline }}</p>
@@ -19,12 +19,18 @@
                     <a href="{{ \App\Models\Setting::whatsappUrl("Halo Rucisoft, saya ingin demo {$solution->name}.") }}" target="_blank" rel="noopener" class="btn-wa">
                         @include('partials.wa-icon', ['class' => 'size-5']) Jadwalkan Demo
                     </a>
+                    @if ($solution->website_url)
+                        <a href="{{ $solution->website_url }}" target="_blank" rel="noopener" class="btn-outline">
+                            Coba demo aplikasi <x-heroicon-o-arrow-top-right-on-square class="size-4" />
+                        </a>
+                    @endif
                     <a href="{{ \App\Models\Setting::whatsappUrl("Halo Rucisoft, saya ingin penawaran {$solution->name}.") }}" target="_blank" rel="noopener" class="btn-outline">Minta Penawaran</a>
                 </div>
             </div>
             <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-navy-900/5">
-                @if ($solution->image)
-                    <img src="{{ Storage::disk('public')->url($solution->image) }}" alt="{{ $solution->name }}" class="mb-6 w-full rounded-2xl">
+                @if ($solution->imageUrl())
+                    <img src="{{ $solution->imageUrl() }}" alt="Tampilan {{ $solution->name }}" class="mb-6 w-full rounded-2xl border border-slate-100"
+                         @if ($solution->fallbackImageUrl()) onerror="this.onerror=null;this.src='{{ $solution->fallbackImageUrl() }}'" @endif>
                 @endif
                 <p class="text-sm font-bold text-navy-900">Fitur utama</p>
                 <ul class="mt-4 space-y-3">
@@ -63,7 +69,7 @@
             <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 @foreach ($others as $other)
                     <a href="{{ route('solutions.show', $other) }}" class="rounded-2xl bg-white p-5 transition hover:shadow-lg">
-                        <x-dynamic-component :component="$other->icon ?: 'heroicon-o-squares-2x2'" class="size-6 text-brand-600" />
+                        @include('partials.product-logo', ['solution' => $other, 'class' => 'size-9'])
                         <p class="mt-3 text-sm font-bold text-navy-900">{{ $other->name }}</p>
                     </a>
                 @endforeach

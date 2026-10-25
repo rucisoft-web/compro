@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Solutions\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -17,6 +18,10 @@ class SolutionsTable
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
+                ImageColumn::make('logo_preview')
+                    ->label('Logo')
+                    ->state(fn ($record) => $record->logoUrl())
+                    ->imageSize(36),
                 TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),

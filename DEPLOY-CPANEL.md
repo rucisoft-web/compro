@@ -89,6 +89,20 @@ php artisan migrate --force
 php artisan optimize
 ```
 
+## Mengganti produk ke 6 aplikasi terbaru
+
+Perintah ini menghapus 6 produk lama (BSC Professional, RuciLegal, RuciESG, RuciNexa, RuciTOP, RuciAI) beserta item katalognya dan 2 item "(contoh)", lalu membuat Ruci BSC, Akredia, Ruci PRIMA, Ruci Notaria, Ruci Medika, dan Ruci MUFAKAT. Item katalog lain yang Anda buat sendiri lewat admin tidak dihapus.
+
+```bash
+cd ~/compro
+git pull
+php artisan migrate --force
+php artisan db:seed --class=ProductSeeder --force
+php artisan optimize:clear && php artisan optimize
+```
+
+Logo dan screenshot diambil langsung dari situs masing-masing aplikasi (misalnya `https://medika.rucisoft.id/img/logo/ruci-medika.svg`). Jika salah satunya gagal dimuat, website otomatis memakai gambar bawaan. Semua logo, gambar, dan teks bisa diubah di admin melalui menu **Solusi**.
+
 ## Jika ada masalah
 
 - **Error 500:** lihat `storage/logs/laravel.log`, dan pastikan izin folder: `chmod -R 775 storage bootstrap/cache`.

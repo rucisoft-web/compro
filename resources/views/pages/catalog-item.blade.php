@@ -20,8 +20,9 @@
 
             <aside class="lg:col-span-2">
                 <div class="sticky top-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-navy-900/5">
-                    @if ($item->cover_image)
-                        <img src="{{ Storage::disk('public')->url($item->cover_image) }}" alt="{{ $item->title }}" class="aspect-[4/3] w-full object-cover">
+                    @if ($item->coverUrl())
+                        <img src="{{ $item->coverUrl() }}" alt="{{ $item->title }}" class="aspect-[16/10] w-full object-cover object-top"
+                             @if ($item->coverFallbackUrl()) onerror="this.onerror=null;this.src='{{ $item->coverFallbackUrl() }}'" @endif>
                     @endif
                     <div class="space-y-4 p-6">
                         @if ($item->solution)
@@ -36,6 +37,11 @@
                         <a href="{{ $item->whatsappUrl() }}" target="_blank" rel="noopener" class="btn-wa w-full">
                             @include('partials.wa-icon', ['class' => 'size-5']) Tanya via WhatsApp
                         </a>
+                        @if ($item->solution?->website_url)
+                            <a href="{{ $item->solution->website_url }}" target="_blank" rel="noopener" class="btn-outline w-full">
+                                Coba demo aplikasi <x-heroicon-o-arrow-top-right-on-square class="size-4" />
+                            </a>
+                        @endif
                         <a href="mailto:{{ \App\Models\Setting::get('email') }}?subject={{ rawurlencode($item->title) }}" class="btn-outline w-full">Kirim Email</a>
                     </div>
                 </div>

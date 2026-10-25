@@ -26,6 +26,10 @@ class SolutionForm
         'heroicon-o-chart-bar' => 'Grafik batang',
         'heroicon-o-clipboard-document-check' => 'Checklist',
         'heroicon-o-users' => 'Pengguna',
+        'heroicon-o-academic-cap' => 'Toga (pendidikan)',
+        'heroicon-o-document-text' => 'Dokumen (notaris)',
+        'heroicon-o-heart' => 'Hati (kesehatan)',
+        'heroicon-o-user-group' => 'Kelompok (rapat)',
     ];
 
     public static function configure(Schema $schema): Schema
@@ -58,18 +62,39 @@ class SolutionForm
                             ->label('Deskripsi lengkap (halaman detail)')
                             ->columnSpanFull(),
                     ]),
-                Section::make('Tampilan')
+                Section::make('Logo, gambar & tautan')
+                    ->description('Unggahan file lebih diutamakan. Jika kosong, dipakai URL; jika URL juga kosong atau gagal dimuat, dipakai gambar bawaan.')
                     ->columns(2)
                     ->columnSpanFull()
                     ->schema([
-                        Select::make('icon')
-                            ->label('Ikon')
-                            ->options(self::ICONS),
+                        FileUpload::make('logo')
+                            ->label('Unggah logo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('solutions/logos'),
+                        TextInput::make('logo_url')
+                            ->label('atau URL logo')
+                            ->url(),
                         FileUpload::make('image')
-                            ->label('Gambar / screenshot')
+                            ->label('Unggah gambar kartu / screenshot')
                             ->image()
                             ->disk('public')
                             ->directory('solutions'),
+                        TextInput::make('image_url')
+                            ->label('atau URL gambar')
+                            ->url(),
+                        TextInput::make('website_url')
+                            ->label('Alamat aplikasi / demo')
+                            ->url()
+                            ->columnSpanFull(),
+                    ]),
+                Section::make('Tampilan')
+                    ->columns(3)
+                    ->columnSpanFull()
+                    ->schema([
+                        Select::make('icon')
+                            ->label('Ikon cadangan')
+                            ->options(self::ICONS),
                         TextInput::make('sort_order')
                             ->label('Urutan')
                             ->numeric()
