@@ -44,7 +44,7 @@ class CatalogItemForm
                             ->afterStateUpdated(fn (Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
                         TextInput::make('subtitle')
                             ->label('Subjudul')
-                            ->placeholder('contoh: Praktik menggunakan perangkat lunak Ruci BSC')
+                            ->placeholder('contoh: Praktik menggunakan perangkat lunak Akredia')
                             ->columnSpanFull(),
                         TextInput::make('slug')
                             ->required()

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Sales-funnel content: the "cara bekerja sama" steps, the Ruci BSC pilot scope,
- * and the first Rucisoft Academy programs (BSC as the pilot product line).
+ * and the Rucisoft Academy programs per product (Ruci BSC, Akredia).
  *
  * Safe to run repeatedly; records are matched by number or slug.
  */
@@ -21,6 +21,7 @@ class FunnelSeeder extends Seeder
         DB::transaction(function () {
             $this->seedStages();
             $this->seedBsc();
+            $this->seedAkredia();
         });
     }
 
@@ -44,12 +45,7 @@ class FunnelSeeder extends Seeder
 
     private function seedBsc(): void
     {
-        $bsc = Solution::where('slug', 'ruci-bsc')->first();
-        if (! $bsc) {
-            return;
-        }
-
-        $bsc->update([
+        $this->seedProduct('ruci-bsc', 20, [
             'problem_statement' => 'Strategi sering berhenti di dokumen: sulit diterjemahkan menjadi pekerjaan, target, penanggung jawab, dan ukuran keberhasilan yang dipantau manajemen.',
             'pilot_scope' => [
                 ['element' => 'Durasi', 'scope' => 'Usulan awal 30 hari, disesuaikan kebutuhan'],
@@ -60,9 +56,7 @@ class FunnelSeeder extends Seeder
                 ['element' => 'Keberhasilan', 'scope' => 'Data berhasil dimasukkan, dashboard digunakan, dan satu review kinerja terlaksana'],
                 ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
             ],
-        ]);
-
-        $items = [
+        ], [
             [
                 'type' => 'webinar',
                 'slug' => 'webinar-strategi-yang-dapat-dipantau',
@@ -123,14 +117,104 @@ class FunnelSeeder extends Seeder
                 ],
                 'agenda' => null,
             ],
-        ];
+        ]);
+    }
+
+    private function seedAkredia(): void
+    {
+        $this->seedProduct('akredia', 30, [
+            'problem_statement' => 'Persiapan akreditasi sering menumpuk menjelang tenggat: bukti tersebar di banyak unit, LED dan LKPT disusun terburu-buru, dan pimpinan sulit melihat indikator mana yang belum siap.',
+            'pilot_scope' => [
+                ['element' => 'Durasi', 'scope' => 'Usulan awal 30 hari, disesuaikan jadwal akreditasi'],
+                ['element' => 'Unit', 'scope' => 'LPM atau tim akreditasi institusi, bersama beberapa unit pemilik data'],
+                ['element' => 'Pengguna', 'scope' => 'Pimpinan, ketua LPM, administrator, dan PIC kriteria'],
+                ['element' => 'Data', 'scope' => 'Sejumlah indikator IAPT 4.1 dan bukti pendukung yang disepakati'],
+                ['element' => 'Pendampingan', 'scope' => 'Kickoff, pemeriksaan kemajuan, dan evaluasi akhir'],
+                ['element' => 'Keberhasilan', 'scope' => 'Bukti terunggah dan tervalidasi, Indeks Kesiapan terbaca, dan satu rapat tinjauan pimpinan terlaksana'],
+                ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
+            ],
+        ], [
+            [
+                'type' => 'webinar',
+                'slug' => 'webinar-akreditasi-tanpa-kejar-tenggat',
+                'title' => 'Webinar: Akreditasi Institusi Tanpa Kejar Tenggat',
+                'subtitle' => 'Memahami IAPT 4.1 dan cara menyiapkan bukti sejak awal bersama Akredia',
+                'summary' => 'Sesi 60-90 menit dengan studi kasus: mengapa persiapan akreditasi selalu mepet, apa yang dinilai asesor, dan bagaimana institusi memantau kesiapan setiap indikator.',
+                'audience' => 'Pimpinan perguruan tinggi, LPM, tim akreditasi, dan kepala unit',
+                'duration' => '60-90 menit',
+                'location' => 'Online',
+                'price_label' => 'Gratis, dengan pendaftaran',
+                'outcomes' => ['Pemahaman struktur dan indikator IAPT 4.1', 'Contoh peta bukti dan LED yang baik', 'Checklist kesiapan akreditasi institusi'],
+                'agenda' => [
+                    ['part' => 'Masalah persiapan akreditasi', 'portion' => '25%', 'content' => 'Mengapa bukti tersebar dan penyusunan selalu mepet'],
+                    ['part' => 'Studi kasus', 'portion' => '45%', 'content' => 'Dari peta instrumen sampai simulasi skor dan asesmen lapangan'],
+                    ['part' => 'Demo singkat & tanya jawab', 'portion' => '30%', 'content' => 'Melihat alur kerja di Akredia'],
+                ],
+            ],
+            [
+                'type' => 'workshop',
+                'slug' => 'workshop-peta-bukti-led-tindak-lanjut-akreditasi',
+                'title' => 'Workshop Menyusun Peta Bukti, LED, dan Rencana Tindak Lanjut Akreditasi Institusi',
+                'subtitle' => 'Praktik menggunakan perangkat lunak Akredia',
+                'summary' => 'Workshop praktik setengah hari atau satu hari. Peserta memetakan indikator IAPT 4.1, menautkan bukti, menyusun draf narasi LED, dan menjalankan simulasi skor langsung di aplikasi, lalu membawa pulang hasilnya.',
+                'audience' => 'LPM, tim akreditasi, dan PIC kriteria di perguruan tinggi',
+                'duration' => 'Setengah hari / 1 hari',
+                'location' => 'Online atau tatap muka',
+                'price_label' => 'Berbayar per peserta atau per tim',
+                'outcomes' => [
+                    'Peta indikator IAPT 4.1 dan PIC per kriteria',
+                    'Daftar bukti prioritas dan status validasinya',
+                    'Draf narasi LED untuk satu kriteria',
+                    'Hasil simulasi skor dan Indeks Kesiapan',
+                    'Daftar celah dan rencana tindak lanjut',
+                    'Hasil praktik yang bisa diekspor',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah dan pendekatan', 'portion' => '20%', 'content' => 'Apa yang dinilai asesor dan mengapa bukti harus disiapkan sejak awal'],
+                    ['part' => 'Praktik terpandu', 'portion' => '50%', 'content' => 'Memetakan indikator, menautkan bukti, menyusun LED, dan simulasi skor dalam aplikasi'],
+                    ['part' => 'Pembahasan hasil', 'portion' => '20%', 'content' => 'Menguji kualitas bukti dan narasi peserta serta kesiapan asesmen'],
+                    ['part' => 'Rencana implementasi', 'portion' => '10%', 'content' => 'Tahapan penerapan, dukungan, dan pilihan paket'],
+                ],
+            ],
+            [
+                'type' => 'inhouse',
+                'slug' => 'workshop-in-house-dan-pilot-akredia',
+                'title' => 'Workshop In-House & Pilot Akredia',
+                'subtitle' => 'Untuk institusi yang sedang menyiapkan akreditasi',
+                'summary' => 'Workshop khusus tim akreditasi Anda dengan data institusi sendiri, dilanjutkan pilot terbatas yang didampingi, dengan ukuran keberhasilan dan jadwal keputusan yang disepakati di awal.',
+                'audience' => 'Perguruan tinggi negeri dan swasta yang menyiapkan akreditasi institusi',
+                'duration' => 'Workshop 1-2 hari, pilot usulan 30 hari',
+                'location' => 'Di kampus Anda atau online',
+                'price_label' => 'Sesuai lingkup',
+                'outcomes' => [
+                    'Peta indikator dan bukti institusi Anda',
+                    'Lingkup dan ukuran keberhasilan pilot',
+                    'Satu tinjauan kesiapan bersama pimpinan',
+                    'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
+                ],
+                'agenda' => null,
+            ],
+        ]);
+    }
+
+    /**
+     * Sets a product's funnel content and upserts its Academy programs.
+     */
+    private function seedProduct(string $slug, int $sortBase, array $attributes, array $items): void
+    {
+        $solution = Solution::where('slug', $slug)->first();
+        if (! $solution) {
+            return;
+        }
+
+        $solution->update($attributes);
 
         foreach ($items as $i => $item) {
             CatalogItem::updateOrCreate(['slug' => $item['slug']], $item + [
-                'solution_id' => $bsc->id,
+                'solution_id' => $solution->id,
                 'registration_open' => true,
                 'is_active' => true,
-                'sort_order' => 20 + $i,
+                'sort_order' => $sortBase + $i,
             ]);
         }
     }

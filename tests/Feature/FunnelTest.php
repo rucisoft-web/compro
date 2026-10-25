@@ -111,6 +111,12 @@ class FunnelTest extends TestCase
             ->assertSee('Lisensi atau langganan')
             ->assertSee('name="kind" value="proposal"', false);
 
+        $this->get('/solusi/akredia')
+            ->assertOk()
+            ->assertSee('LPM atau tim akreditasi institusi')
+            ->assertSee('Workshop Menyusun Peta Bukti, LED, dan Rencana Tindak Lanjut');
+        $this->get('/academy?produk=akredia')->assertOk()->assertSee('Akreditasi Institusi Tanpa Kejar Tenggat');
+
         // Products without their own pilot scope fall back to the generic one.
         $this->get('/solusi/ruci-medika')->assertOk()->assertSee('Satu unit kerja, divisi, atau cabang');
     }
