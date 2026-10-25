@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ReplicateAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -38,6 +39,7 @@ class SocialPostsTable
                 TextColumn::make('status')->badge()
                     ->formatStateUsing(fn (string $state) => SocialPost::STATUSES[$state] ?? $state)
                     ->color(fn (string $state) => SocialPost::STATUS_COLORS[$state] ?? 'gray'),
+                IconColumn::make('published_on_site')->label('Di website')->boolean(),
                 TextColumn::make('scheduled_at')->label('Rencana tayang')->dateTime('d M Y H:i')->sortable()->placeholder('-'),
             ])
             ->filters([
@@ -62,9 +64,15 @@ class SocialPostsTable
                         ->hidden(fn (SocialPost $record) => $record->status === 'terposting')
                         ->schema([TextInput::make('posted_url')->label('Link postingan (opsional)')->url()])
                         ->action(fn (SocialPost $record, array $data) => $record->update(['status' => 'terposting', 'posted_at' => now()] + $data)),
+                    Action::make('view')
+                        ->label('Lihat di website')
+                        ->icon('heroicon-o-arrow-top-right-on-square')
+                        ->visible(fn (SocialPost $record) => $record->published_on_site && $record->slug)
+                        ->url(fn (SocialPost $record) => route('articles.show', $record))
+                        ->openUrlInNewTab(),
                     ReplicateAction::make()
                         ->label('Duplikat')
-                        ->excludeAttributes(['posted_at', 'posted_url', 'scheduled_at'])
+                        ->excludeAttributes(['posted_at', 'posted_url', 'scheduled_at', 'slug', 'published_on_site', 'published_at'])
                         ->beforeReplicaSaved(fn (SocialPost $replica) => $replica->fill(['status' => 'draf', 'title' => $replica->title.' (salinan)'])),
                 ]),
             ])

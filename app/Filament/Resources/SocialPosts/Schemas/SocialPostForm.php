@@ -10,6 +10,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -42,7 +43,7 @@ class SocialPostForm
                             ->helperText('Batas karakter: '.$limits.'. Link dan tagar ditambahkan otomatis saat disalin.'),
                         TextInput::make('hashtags')->label('Tagar')->placeholder('#Rucisoft #BalancedScorecard')->columnSpanFull(),
                         TextInput::make('link_url')->label('Link tujuan')->url()->columnSpanFull()
-                            ->helperText('Kosongkan untuk memakai halaman produk atau acara di rucisoft.id. Link rucisoft.id otomatis diberi kode UTM agar prospek dari postingan ini bisa dilacak.'),
+                            ->helperText('Kosongkan untuk memakai halaman artikel (bila tampil di website), acara, atau produk di rucisoft.id. Link rucisoft.id otomatis diberi kode UTM agar prospek dari postingan ini bisa dilacak.'),
                     ]),
                 Section::make('Jadwal & status')
                     ->columnSpan(1)
@@ -53,6 +54,13 @@ class SocialPostForm
                             ->visible(fn (Get $get) => $get('status') === 'terposting'),
                         TextInput::make('posted_url')->label('Link postingan')->url()
                             ->visible(fn (Get $get) => $get('status') === 'terposting'),
+                        Toggle::make('published_on_site')->label('Tampilkan di menu Artikel website')->live(),
+                        DateTimePicker::make('published_at')->label('Tanggal terbit di website')->seconds(false)
+                            ->visible(fn (Get $get) => $get('published_on_site'))
+                            ->helperText('Kosongkan untuk terbit sekarang.'),
+                        TextInput::make('slug')->label('Alamat artikel')->prefix('/artikel/')->alphaDash()->unique(ignoreRecord: true)
+                            ->visible(fn (Get $get) => $get('published_on_site'))
+                            ->helperText('Kosongkan untuk dibuat otomatis dari judul.'),
                         FileUpload::make('image')->label('Gambar utama')->image()->disk('public')->directory('sosmed')->imageEditor()
                             ->helperText('Infografis atau desain sampul.'),
                         FileUpload::make('gallery')->label('Screenshot & grafik pendukung')->image()->multiple()->reorderable()

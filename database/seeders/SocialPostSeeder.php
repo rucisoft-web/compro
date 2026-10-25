@@ -44,6 +44,7 @@ class SocialPostSeeder extends Seeder
                 'body' => trim($body),
                 'hashtags' => $hashtags,
                 'status' => 'draf',
+                'published_on_site' => true,
             ])->save();
         }
     }

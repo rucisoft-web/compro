@@ -5,17 +5,18 @@
             <img src="{{ asset('images/logo.svg') }}" alt="Rucisoft Indonesia" class="h-10 w-auto">
         </a>
 
-        <nav class="hidden items-center gap-7 text-sm font-medium text-slate-600 lg:flex">
+        <nav class="hidden items-center gap-5 text-sm font-medium whitespace-nowrap text-slate-600 lg:flex xl:gap-7">
             <a href="{{ $home }}#solusi" class="hover:text-brand-600">Produk</a>
             <a href="{{ route('academy') }}" class="hover:text-brand-600">Academy</a>
             <a href="{{ $home }}#cara-kerja" class="hover:text-brand-600">Cara Kerja Sama</a>
+            <a href="{{ route('articles.index') }}" class="hover:text-brand-600">Artikel</a>
             <a href="{{ route('catalog.index') }}" class="hover:text-brand-600">Katalog</a>
-            <a href="{{ $home }}#tentang" class="hover:text-brand-600">Tentang</a>
+            <a href="{{ $home }}#tentang" class="hidden hover:text-brand-600 xl:inline">Tentang</a>
             <a href="{{ $home }}#demo" class="hover:text-brand-600">Kontak</a>
         </nav>
 
-        <div class="hidden items-center gap-3 lg:flex">
-            <a href="{{ route('academy') }}" class="btn-outline !py-2.5">Webinar Gratis</a>
+        <div class="hidden items-center gap-3 whitespace-nowrap lg:flex">
+            <a href="{{ route('academy') }}" class="btn-outline hidden !py-2.5 xl:inline-flex">Webinar Gratis</a>
             <a href="{{ $home }}#demo" class="btn-primary !py-2.5">Jadwalkan Demo</a>
         </div>
 
@@ -31,6 +32,7 @@
             <a href="{{ $home }}#solusi" class="rounded-lg px-3 py-2 hover:bg-slate-50">Produk</a>
             <a href="{{ route('academy') }}" class="rounded-lg px-3 py-2 hover:bg-slate-50">Academy</a>
             <a href="{{ $home }}#cara-kerja" class="rounded-lg px-3 py-2 hover:bg-slate-50">Cara Kerja Sama</a>
+            <a href="{{ route('articles.index') }}" class="rounded-lg px-3 py-2 hover:bg-slate-50">Artikel</a>
             <a href="{{ route('catalog.index') }}" class="rounded-lg px-3 py-2 hover:bg-slate-50">Katalog</a>
             <a href="{{ $home }}#tentang" class="rounded-lg px-3 py-2 hover:bg-slate-50">Tentang</a>
             <a href="{{ $home }}#demo" class="rounded-lg px-3 py-2 hover:bg-slate-50">Kontak</a>

@@ -44,10 +44,11 @@ class SocialPostTest extends TestCase
         $post = SocialPost::whereRelation('solution', 'slug', 'akredia')->first();
         $text = $post->fullText('linkedin');
 
-        $this->assertStringContainsString('/solusi/akredia?utm_source=linkedin&utm_medium=social&utm_campaign=akredia-edukasi', $text);
+        // A post published on the website links to its article page.
+        $this->assertStringContainsString('/artikel/'.$post->slug.'?utm_source=linkedin&utm_medium=social&utm_campaign=akredia-edukasi', $text);
         $this->assertStringEndsWith($post->hashtags, $text);
 
-        $post->update(['funnel_stage' => 'pilot']);
+        $post->update(['funnel_stage' => 'pilot', 'published_on_site' => false]);
         $this->assertStringContainsString('?langkah=pilot&utm_source=', $post->trackedLink());
         $this->assertStringEndsWith('#mulai', $post->trackedLink());
 
@@ -63,12 +64,38 @@ class SocialPostTest extends TestCase
         $this->assertNotNull($post->posted_at);
     }
 
+    public function test_published_articles_appear_on_the_website(): void
+    {
+        $bsc = SocialPost::whereRelation('solution', 'slug', 'ruci-bsc')->first();
+        $this->assertSame('mengapa-strategi-yang-bagus-sering-berhenti-di-dokumen-rencana', $bsc->slug);
+
+        $this->get('/')->assertSee(route('articles.index'));
+        $this->get('/artikel')->assertOk()->assertSee($bsc->headline())->assertSee('Ruci MUFAKAT');
+        $this->get('/artikel?produk=akredia')->assertOk()->assertDontSee($bsc->headline());
+
+        $this->get('/artikel/'.$bsc->slug)
+            ->assertOk()
+            ->assertSee('Mengapa ini terjadi')
+            ->assertSee('Bagaimana Ruci BSC membantu')
+            ->assertSee('sosmed/ruci-bsc/2-peta-strategi.jpg', false)
+            ->assertSee('langkah=demo', false);
+
+        $this->get('/sitemap.xml')->assertSee('/artikel/'.$bsc->slug, false);
+
+        $bsc->update(['published_on_site' => false]);
+        $this->get('/artikel/'.$bsc->slug)->assertNotFound();
+        $this->get('/artikel')->assertDontSee($bsc->headline());
+
+        SocialPost::query()->update(['published_at' => now()->addDay()]);
+        $this->get('/artikel')->assertSee('Belum ada artikel');
+    }
+
     public function test_admin_pages_load(): void
     {
         $this->actingAs(User::factory()->create());
 
         $this->get('/admin/social-posts')->assertOk()->assertSee('Mengapa strategi berhenti di dokumen rencana');
         $this->get('/admin/social-posts/create')->assertOk();
-        $this->get('/admin/social-posts/'.SocialPost::first()->id.'/edit')->assertOk();
+        $this->get('/admin/social-posts/'.SocialPost::first()->slug.'/edit')->assertOk();
     }
 }

@@ -27,6 +27,8 @@
                 <li><a href="{{ route('catalog.index', ['type' => 'buku']) }}" class="hover:text-brand-400">Buku &amp; Panduan</a></li>
                 <li><a href="{{ route('catalog.index', ['type' => 'workshop']) }}" class="hover:text-brand-400">Workshop</a></li>
                 <li><a href="{{ route('catalog.index', ['type' => 'software']) }}" class="hover:text-brand-400">Implementasi Software</a></li>
+                <li><a href="{{ route('academy') }}" class="hover:text-brand-400">Rucisoft Academy</a></li>
+                <li><a href="{{ route('articles.index') }}" class="hover:text-brand-400">Artikel</a></li>
             </ul>
         </div>
 

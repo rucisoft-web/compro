@@ -58,6 +58,11 @@ class Solution extends Model
         return $this->pilot_scope ?: self::DEFAULT_PILOT;
     }
 
+    public function socialPosts(): HasMany
+    {
+        return $this->hasMany(SocialPost::class);
+    }
+
     public function academyItems(): HasMany
     {
         return $this->catalogItems()->whereIn('type', CatalogItem::ACADEMY_TYPES);

@@ -138,4 +138,4 @@ php artisan db:seed --class=SocialPostSeeder --force
 php artisan optimize:clear && php artisan optimize
 ```
 
-`SocialPostSeeder` menambahkan 6 artikel (satu per produk) beserta infografis dan screenshot aplikasi. Artikel yang statusnya sudah bukan draf tidak akan ditimpa bila seeder dijalankan ulang.
+`SocialPostSeeder` menambahkan 6 artikel (satu per produk) beserta infografis dan screenshot aplikasi, dan langsung menampilkannya di menu **Artikel** website (rucisoft.id/artikel). Matikan "Tampilkan di menu Artikel website" di admin untuk menyembunyikan artikel. Artikel yang statusnya sudah bukan draf tidak akan ditimpa bila seeder dijalankan ulang.

@@ -12,8 +12,8 @@
         <meta name="description" content="{{ $pageDescription }}">
         <meta property="og:title" content="{{ $pageTitle ?: $siteName }}">
         <meta property="og:description" content="{{ $pageDescription }}">
-        <meta property="og:image" content="{{ asset('images/logo.svg') }}">
-        <meta property="og:type" content="website">
+        <meta property="og:image" content="{{ trim($__env->yieldContent('image')) ?: asset('images/logo.svg') }}">
+        <meta property="og:type" content="{{ trim($__env->yieldContent('og_type')) ?: 'website' }}">
         <meta property="og:url" content="{{ url()->current() }}">
         <link rel="canonical" href="{{ url()->current() }}">
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
