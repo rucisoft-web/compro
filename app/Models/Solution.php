@@ -9,8 +9,33 @@ use Illuminate\Support\Facades\Storage;
 
 class Solution extends Model
 {
+    /**
+     * Used when a product has no pilot scope of its own yet.
+     */
+    public const DEFAULT_PILOT = [
+        ['element' => 'Durasi', 'scope' => 'Usulan awal 30 hari, disesuaikan kebutuhan'],
+        ['element' => 'Unit', 'scope' => 'Satu unit kerja, divisi, atau cabang'],
+        ['element' => 'Pengguna', 'scope' => 'Sponsor, administrator, dan beberapa pengguna inti'],
+        ['element' => 'Data', 'scope' => 'Sejumlah data dan proses yang disepakati bersama'],
+        ['element' => 'Pendampingan', 'scope' => 'Kickoff, pemeriksaan kemajuan, dan evaluasi akhir'],
+        ['element' => 'Ukuran keberhasilan', 'scope' => 'Disepakati sebelum pilot dimulai'],
+        ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
+    ];
+
+    /**
+     * Cost components every proposal separates, so buyers see what they pay for.
+     */
+    public const PROPOSAL_COMPONENTS = [
+        ['Lisensi atau langganan', 'Hak penggunaan, batas pengguna, entitas, atau modul', 'heroicon-o-key'],
+        ['Implementasi', 'Konfigurasi, pengaturan akses, dan penyiapan proses', 'heroicon-o-cog-6-tooth'],
+        ['Migrasi data', 'Impor, pemetaan, dan pemeriksaan data', 'heroicon-o-arrow-path'],
+        ['Pelatihan', 'Untuk administrator dan pengguna', 'heroicon-o-academic-cap'],
+        ['Pendampingan', 'Bantuan penerapan dan review penggunaan', 'heroicon-o-lifebuoy'],
+        ['Tambahan (opsional)', 'Integrasi, pengembangan khusus, atau penggunaan AI', 'heroicon-o-puzzle-piece'],
+    ];
+
     protected $fillable = [
-        'name', 'slug', 'tagline', 'description', 'features', 'icon', 'logo', 'logo_url',
+        'name', 'slug', 'tagline', 'problem_statement', 'description', 'features', 'pilot_scope', 'icon', 'logo', 'logo_url',
         'image', 'image_url', 'website_url', 'sort_order', 'is_active',
     ];
 
@@ -18,6 +43,7 @@ class Solution extends Model
     {
         return [
             'features' => 'array',
+            'pilot_scope' => 'array',
             'is_active' => 'boolean',
         ];
     }
@@ -25,6 +51,16 @@ class Solution extends Model
     public function catalogItems(): HasMany
     {
         return $this->hasMany(CatalogItem::class);
+    }
+
+    public function pilotScope(): array
+    {
+        return $this->pilot_scope ?: self::DEFAULT_PILOT;
+    }
+
+    public function academyItems(): HasMany
+    {
+        return $this->catalogItems()->whereIn('type', CatalogItem::ACADEMY_TYPES);
     }
 
     public function scopeActive(Builder $query): Builder

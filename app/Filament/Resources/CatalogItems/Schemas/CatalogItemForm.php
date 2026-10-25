@@ -4,8 +4,10 @@ namespace App\Filament\Resources\CatalogItems\Schemas;
 
 use App\Models\CatalogItem;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -40,6 +42,10 @@ class CatalogItemForm
                             ->required()
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn (Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                        TextInput::make('subtitle')
+                            ->label('Subjudul')
+                            ->placeholder('contoh: Praktik menggunakan perangkat lunak Ruci BSC')
+                            ->columnSpanFull(),
                         TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
@@ -53,17 +59,48 @@ class CatalogItemForm
                             ->label('Isi lengkap')
                             ->columnSpanFull(),
                     ]),
-                Section::make('Jadwal workshop')
+                Section::make('Detail Rucisoft Academy')
+                    ->description('Untuk webinar, workshop, dan in-house. Tonjolkan hasil kerja yang dibawa pulang peserta.')
                     ->columns(2)
                     ->columnSpanFull()
-                    ->visible(fn (Get $get) => $get('type') === 'workshop')
+                    ->visible(fn (Get $get) => in_array($get('type'), CatalogItem::ACADEMY_TYPES, true))
                     ->schema([
                         TextInput::make('event_date')
-                            ->label('Tanggal')
-                            ->placeholder('contoh: 12-13 November 2026'),
+                            ->label('Jadwal')
+                            ->placeholder('contoh: 12 November 2026, 09.00-16.00 WIB'),
                         TextInput::make('location')
-                            ->label('Lokasi')
-                            ->placeholder('contoh: Jakarta / Online'),
+                            ->label('Format & lokasi')
+                            ->placeholder('contoh: Online (Zoom) / Jakarta'),
+                        TextInput::make('duration')
+                            ->label('Durasi')
+                            ->placeholder('contoh: 1 hari'),
+                        TextInput::make('price_label')
+                            ->label('Biaya')
+                            ->placeholder('contoh: Gratis / Rp1.500.000 per peserta'),
+                        TextInput::make('audience')
+                            ->label('Cocok untuk')
+                            ->columnSpanFull(),
+                        TagsInput::make('outcomes')
+                            ->label('Hasil yang dibawa pulang')
+                            ->placeholder('Ketik hasil lalu Enter')
+                            ->reorderable()
+                            ->columnSpanFull(),
+                        Repeater::make('agenda')
+                            ->label('Susunan acara')
+                            ->schema([
+                                TextInput::make('part')->label('Bagian')->required(),
+                                TextInput::make('portion')->label('Porsi')->placeholder('20%'),
+                                TextInput::make('content')->label('Isi')->columnSpan(2),
+                            ])
+                            ->columns(4)
+                            ->reorderable()
+                            ->collapsible()
+                            ->defaultItems(0)
+                            ->columnSpanFull(),
+                        Toggle::make('registration_open')
+                            ->label('Pendaftaran dibuka')
+                            ->helperText('Jika dimatikan, formulir berubah menjadi "daftar minat".')
+                            ->default(true),
                     ]),
                 Section::make('Tampilan & WhatsApp')
                     ->columns(2)

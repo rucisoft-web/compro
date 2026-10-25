@@ -6,7 +6,6 @@ use App\Models\ClientSegment;
 use App\Models\DashboardMetric;
 use App\Models\Principle;
 use App\Models\Setting;
-use App\Models\Stage;
 use Illuminate\Database\Seeder;
 
 class ContentSeeder extends Seeder
@@ -19,14 +18,7 @@ class ContentSeeder extends Seeder
 
         $this->call(ProductSeeder::class);
 
-        $stages = [
-            ['01', 'Memahami', 'Buku & Panduan', 'Konsep, praktik terbaik, template, checklist, dan pengenalan software.'],
-            ['02', 'Mempersiapkan', 'Workshop Praktis', 'Asesmen, latihan, studi kasus, penyamaan persepsi, dan rancangan awal.'],
-            ['03', 'Menerapkan', 'Implementasi Software', 'Konfigurasi, migrasi, integrasi, UAT, pelatihan, go-live, dan dukungan.'],
-        ];
-        foreach ($stages as $i => [$number, $label, $title, $description]) {
-            Stage::updateOrCreate(['number' => $number], compact('label', 'title', 'description') + ['sort_order' => $i + 1]);
-        }
+        $this->call(FunnelSeeder::class);
 
         foreach (['Perusahaan Terbuka', 'BUMN & BUMD', 'Pemerintah & BL', 'Rumah Sakit', 'Universitas'] as $i => $name) {
             ClientSegment::updateOrCreate(['name' => $name], ['sort_order' => $i + 1]);

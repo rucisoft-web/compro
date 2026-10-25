@@ -24,20 +24,21 @@
                     </div>
                     <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-navy-900 sm:text-4xl">{{ $solution->name }}</h1>
                     <p class="mt-3 text-lg leading-relaxed text-slate-600">{{ $solution->tagline }}</p>
+                    @if ($solution->problem_statement)
+                        <p class="mt-3 border-l-4 border-brand-400 pl-3 text-sm text-slate-600">{{ $solution->problem_statement }}</p>
+                    @endif
 
                     <div class="mt-7 flex flex-wrap gap-3">
-                        <a href="{{ \App\Models\Setting::whatsappUrl("Halo Rucisoft, saya ingin demo {$solution->name}.") }}" target="_blank" rel="noopener" class="btn-wa">
-                            @include('partials.wa-icon', ['class' => 'size-5']) Jadwalkan Demo
-                        </a>
+                        <a href="#mulai" class="btn-primary">Jadwalkan demo</a>
+                        <a href="#academy" class="btn-outline">Ikuti workshop</a>
                         @if ($solution->website_url)
                             <a href="{{ $solution->website_url }}" target="_blank" rel="noopener" class="btn-outline">
                                 Coba demo aplikasi <x-heroicon-o-arrow-top-right-on-square class="size-4" />
                             </a>
                         @endif
                     </div>
-                    <a href="{{ \App\Models\Setting::whatsappUrl("Halo Rucisoft, saya ingin penawaran {$solution->name}.") }}" target="_blank" rel="noopener"
-                       class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline">
-                        Minta penawaran harga <x-heroicon-o-arrow-right class="size-4" />
+                    <a href="#mulai" @click="$dispatch('open-tab', 'proposal')" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline">
+                        Kebutuhan sudah jelas? Minta proposal <x-heroicon-o-arrow-right class="size-4" />
                     </a>
                 </div>
 
@@ -86,9 +87,7 @@
                         <p class="text-lg font-bold">Ingin melihat langsung?</p>
                         <p class="mt-2 text-sm text-slate-300">Kami siap mendemokan {{ $solution->name }} sesuai kebutuhan organisasi Anda, termasuk pendampingan implementasi.</p>
                         <div class="mt-5 space-y-2">
-                            <a href="{{ \App\Models\Setting::whatsappUrl("Halo Rucisoft, saya ingin demo {$solution->name}.") }}" target="_blank" rel="noopener" class="btn-wa w-full">
-                                @include('partials.wa-icon', ['class' => 'size-5']) Hubungi via WhatsApp
-                            </a>
+                            <a href="#mulai" class="btn-primary w-full">Jadwalkan klinik & demo</a>
                             @if ($solution->website_url)
                                 <a href="{{ $solution->website_url }}" target="_blank" rel="noopener" class="btn w-full border border-white/20 text-white hover:bg-white/10">
                                     Buka {{ parse_url($solution->website_url, PHP_URL_HOST) }}
@@ -101,10 +100,12 @@
         </div>
     </section>
 
+    @include('partials.solution-funnel')
+
     @if ($related->isNotEmpty())
         <section class="pb-12">
             <div class="container-page">
-                <h2 class="text-xl font-extrabold text-navy-900">Buku &amp; workshop terkait</h2>
+                <h2 class="text-xl font-extrabold text-navy-900">Buku &amp; panduan terkait</h2>
                 <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($related as $item)
                         @include('partials.catalog-card', ['item' => $item])
@@ -135,5 +136,4 @@
         </div>
     </section>
 
-    @include('partials.cta')
 @endsection

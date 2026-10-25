@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Solutions\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -53,6 +54,10 @@ class SolutionForm
                             ->label('Deskripsi singkat')
                             ->required()
                             ->columnSpanFull(),
+                        TextInput::make('problem_statement')
+                            ->label('Masalah utama yang diselesaikan')
+                            ->helperText('Tampil di halaman produk untuk menegaskan masalah calon pembeli.')
+                            ->columnSpanFull(),
                         TagsInput::make('features')
                             ->label('Fitur utama')
                             ->placeholder('Ketik fitur lalu Enter')
@@ -87,6 +92,21 @@ class SolutionForm
                             ->label('Alamat aplikasi / demo')
                             ->url()
                             ->columnSpanFull(),
+                    ]),
+                Section::make('Lingkup pilot')
+                    ->description('Kosongkan untuk memakai lingkup pilot umum.')
+                    ->columnSpanFull()
+                    ->collapsed()
+                    ->schema([
+                        Repeater::make('pilot_scope')
+                            ->hiddenLabel()
+                            ->schema([
+                                TextInput::make('element')->label('Unsur')->required(),
+                                TextInput::make('scope')->label('Contoh lingkup')->columnSpan(2),
+                            ])
+                            ->columns(3)
+                            ->reorderable()
+                            ->defaultItems(0),
                     ]),
                 Section::make('Tampilan')
                     ->columns(3)

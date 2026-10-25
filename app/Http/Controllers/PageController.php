@@ -17,7 +17,8 @@ class PageController extends Controller
     {
         return view('pages.home', [
             'solutions' => Solution::active()->get(),
-            'catalog' => CatalogItem::active()->with('solution')->get(),
+            'catalog' => CatalogItem::active()->with('solution')->whereNotIn('type', CatalogItem::ACADEMY_TYPES)->get(),
+            'events' => CatalogItem::active()->with('solution')->whereIn('type', CatalogItem::ACADEMY_TYPES)->limit(3)->get(),
             'stages' => Stage::orderBy('sort_order')->get(),
             'segments' => ClientSegment::orderBy('sort_order')->get(),
             'principles' => Principle::orderBy('sort_order')->get(),
@@ -31,8 +32,25 @@ class PageController extends Controller
 
         return view('pages.solution', [
             'solution' => $solution,
-            'related' => $solution->catalogItems()->active()->where('type', '!=', 'software')->get(),
+            'events' => $solution->academyItems()->active()->get(),
+            'related' => $solution->catalogItems()->active()->where('type', 'buku')->get(),
             'others' => Solution::active()->whereKeyNot($solution->id)->get(),
+        ]);
+    }
+
+    public function academy(Request $request): View
+    {
+        $solution = Solution::active()->where('slug', $request->string('produk')->toString())->first();
+
+        return view('pages.academy', [
+            'solution' => $solution,
+            'solutions' => Solution::active()->whereHas('academyItems', fn ($q) => $q->where('is_active', true))->get(),
+            'events' => CatalogItem::active()
+                ->with('solution')
+                ->whereIn('type', CatalogItem::ACADEMY_TYPES)
+                ->when($solution, fn ($q) => $q->where('solution_id', $solution->id))
+                ->get()
+                ->groupBy('type'),
         ]);
     }
 

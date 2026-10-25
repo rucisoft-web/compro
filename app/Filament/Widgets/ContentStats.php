@@ -2,20 +2,29 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\CatalogItem;
-use App\Models\Solution;
+use App\Models\Lead;
+use App\Models\Opportunity;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ContentStats extends StatsOverviewWidget
 {
+    protected static ?int $sort = 1;
+
     protected function getStats(): array
     {
+        $workshop = Opportunity::reachedCount('workshop');
+        $pilot = Opportunity::reachedCount('pilot');
+        $won = Opportunity::reachedCount('menang');
+
         return [
-            Stat::make('Solusi aktif', Solution::where('is_active', true)->count()),
-            Stat::make('Software', CatalogItem::where('type', 'software')->where('is_active', true)->count()),
-            Stat::make('Buku', CatalogItem::where('type', 'buku')->where('is_active', true)->count()),
-            Stat::make('Workshop', CatalogItem::where('type', 'workshop')->where('is_active', true)->count()),
+            Stat::make('Prospek baru (7 hari)', Lead::where('created_at', '>=', now()->subDays(7))->count())
+                ->description(Lead::whereNull('handled_at')->count().' belum ditindaklanjuti'),
+            Stat::make('Organisasi di funnel', Opportunity::whereNotIn('stage', ['batal'])->distinct('organization_id')->count('organization_id')),
+            Stat::make('Workshop → pilot', $workshop ? round($pilot / $workshop * 100).'%' : '-')
+                ->description("{$pilot} dari {$workshop} organisasi"),
+            Stat::make('Pilot → pembelian', $pilot ? round($won / $pilot * 100).'%' : '-')
+                ->description("{$won} organisasi membeli"),
         ];
     }
 }

@@ -22,7 +22,7 @@
     <body class="bg-white font-sans text-slate-800 antialiased">
         @include('partials.header')
 
-        <main>
+        <main x-data>
             @yield('content')
         </main>
 

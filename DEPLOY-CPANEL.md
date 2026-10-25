@@ -108,3 +108,19 @@ Logo dan screenshot diambil langsung dari situs masing-masing aplikasi (misalnya
 - **Error 500:** lihat `storage/logs/laravel.log`, dan pastikan izin folder: `chmod -R 775 storage bootstrap/cache`.
 - **Gambar upload tidak tampil:** jalankan ulang `php artisan storage:link`. Bila hosting melarang symlink, minta bantuan penyedia hosting.
 - **Versi PHP di terminal berbeda:** cek dengan `php -v`. Bila masih lama, pakai path PHP 8.3 yang disediakan hosting, misalnya `/opt/cpanel/ea-php83/root/usr/bin/php artisan ...`.
+
+## Update: Sales funnel & Rucisoft Academy
+
+Pembaruan ini menambah halaman `/academy`, formulir prospek (demo, pilot, proposal, asesmen, pendaftaran workshop) dan menu CRM di admin (Prospek Masuk, Peluang Penjualan, Organisasi). Jalankan di Terminal cPanel:
+
+```bash
+cd ~/compro
+git pull
+php artisan migrate --force
+php artisan db:seed --class=FunnelSeeder --force
+php artisan optimize:clear && php artisan optimize
+```
+
+`FunnelSeeder` mengganti 6 tahapan "Cara Kerja Sama", mengisi masalah & lingkup pilot Ruci BSC, serta membuat 3 acara Academy BSC (webinar, workshop, in-house/pilot). Aman dijalankan ulang.
+
+Agar setiap prospek baru juga dikirim ke email, isi SMTP di `.env` (`MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`). Tanpa SMTP, prospek tetap tersimpan dan bisa dilihat di admin → CRM → Prospek Masuk.

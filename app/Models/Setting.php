@@ -24,7 +24,7 @@ class Setting extends Model
         'about_title' => 'Transformasi digital dengan tujuan yang jelas.',
         'about_body' => 'Kami memadukan pengalaman manajemen, proses bisnis, teknologi, dan pendampingan. Software harus menjadi alat pengendalian organisasi, bukan sekadar aplikasi.',
         'cta_title' => 'Diskusikan kebutuhan organisasi bersama Rucisoft.',
-        'meta_description' => 'Rucisoft Indonesia: software, buku, dan workshop untuk strategi, kepatuhan, ESG, layanan korporat, dan AI perusahaan.',
+        'meta_description' => 'Rucisoft Indonesia: aplikasi, Rucisoft Academy, dan pendampingan untuk strategi, akreditasi, fasilitas, kantor notaris, klinik, dan rapat Direksi.',
     ];
 
     public static function get(string $key, ?string $default = null): ?string

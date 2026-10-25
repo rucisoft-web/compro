@@ -12,8 +12,9 @@
                 </h1>
                 <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">{{ \App\Models\Setting::get('hero_subtitle') }}</p>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <a href="#solusi" class="btn-primary">Jelajahi Solusi <x-heroicon-o-arrow-right class="size-4" /></a>
-                    <a href="{{ \App\Models\Setting::whatsappUrl() }}" target="_blank" rel="noopener" class="btn-outline">Konsultasi Kebutuhan</a>
+                    <a href="#solusi" class="btn-primary">Jelajahi Produk <x-heroicon-o-arrow-right class="size-4" /></a>
+                    <a href="{{ route('academy') }}" class="btn-outline">Ikuti Webinar Gratis</a>
+                    <a href="#demo" class="btn-outline">Jadwalkan Demo</a>
                 </div>
                 <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-slate-600">
                     @foreach (array_filter(array_map('trim', explode(',', (string) \App\Models\Setting::get('hero_badges')))) as $badge)
@@ -113,24 +114,60 @@
         </div>
     </section>
 
-    {{-- Knowledge-to-Implementation --}}
-    <section id="model" class="bg-navy-950 py-16 text-white">
+    {{-- Cara kerja sama --}}
+    <section id="cara-kerja" class="bg-navy-950 py-14 text-white">
         <div class="container-page">
-            <div class="max-w-2xl">
-                <p class="eyebrow !text-brand-400">Knowledge-to-Implementation</p>
-                <h2 class="mt-3 text-3xl font-extrabold sm:text-4xl">Dari pemahaman hingga penerapan</h2>
-                <p class="mt-4 text-slate-300">Buku, workshop, dan implementasi software yang saling terhubung agar perubahan benar-benar berjalan.</p>
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <div class="max-w-2xl">
+                    <p class="eyebrow !text-brand-400">Cara bekerja sama</p>
+                    <h2 class="mt-2 text-3xl font-extrabold sm:text-4xl">Dari memahami masalah sampai sistem benar-benar dipakai</h2>
+                    <p class="mt-3 text-slate-300">Mulai dari tahap mana pun. Organisasi yang kebutuhannya sudah jelas bisa langsung ke demo dan proposal.</p>
+                </div>
+                <a href="#demo" class="btn-primary">Langsung demo & proposal</a>
             </div>
-            <div class="mt-8 grid gap-6 md:grid-cols-3">
+            <ol @class(['mt-8 grid gap-3 sm:grid-cols-2', 'lg:grid-cols-3' => $stages->count() <= 3, 'lg:grid-cols-6' => $stages->count() > 3])>
                 @foreach ($stages as $stage)
-                    <div class="rounded-2xl border border-white/10 bg-white/5 p-7">
-                        <p class="text-4xl font-extrabold text-brand-400">{{ $stage->number }}</p>
-                        <p class="mt-4 text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">{{ $stage->label }}</p>
-                        <h3 class="mt-1 text-xl font-bold">{{ $stage->title }}</h3>
-                        <p class="mt-3 text-sm leading-relaxed text-slate-300">{{ $stage->description }}</p>
+                    <li class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                        <p class="text-3xl font-extrabold text-brand-400">{{ $stage->number }}</p>
+                        <p class="mt-3 text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase">{{ $stage->label }}</p>
+                        <h3 class="mt-1 font-bold">{{ $stage->title }}</h3>
+                        <p class="mt-2 text-xs leading-relaxed text-slate-300">{{ $stage->description }}</p>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+    </section>
+
+    {{-- Academy --}}
+    <section id="model" class="py-14">
+        <div class="container-page">
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <div class="max-w-2xl">
+                    <p class="eyebrow">Rucisoft Academy</p>
+                    <h2 class="mt-2 text-3xl font-extrabold text-navy-900 sm:text-4xl">Workshop yang menghasilkan pekerjaan nyata</h2>
+                    <p class="mt-3 text-slate-600">Webinar pengenalan gratis, workshop praktik langsung di aplikasi, hingga workshop in-house dan pilot untuk organisasi Anda.</p>
+                </div>
+                <a href="{{ route('academy') }}" class="btn-outline">Lihat semua program <x-heroicon-o-arrow-right class="size-4" /></a>
+            </div>
+            <div class="mt-8 grid gap-4 md:grid-cols-3">
+                @foreach ([['Webinar pengenalan', 'Gratis, dengan pendaftaran', 'Memahami masalah dan pendekatan penyelesaiannya lewat studi kasus.', 'heroicon-o-video-camera'], ['Workshop praktik', 'Berbayar per peserta atau per tim', 'Praktik terpandu di aplikasi; hasil kerja bisa diekspor dan dibawa pulang.', 'heroicon-o-wrench-screwdriver'], ['In-house & pilot', 'Sesuai lingkup organisasi', 'Workshop khusus tim Anda, dilanjutkan pilot dengan ukuran keberhasilan.', 'heroicon-o-building-office']] as [$title, $model, $desc, $icon])
+                    <div class="flex gap-4 rounded-2xl border border-slate-200 p-5">
+                        <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600"><x-dynamic-component :component="$icon" class="size-6" /></span>
+                        <div>
+                            <p class="font-bold text-navy-900">{{ $title }}</p>
+                            <p class="text-xs font-semibold text-brand-600">{{ $model }}</p>
+                            <p class="mt-2 text-sm text-slate-600">{{ $desc }}</p>
+                        </div>
                     </div>
                 @endforeach
             </div>
+            @if ($events->isNotEmpty())
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($events as $item)
+                        @include('partials.academy-card', ['item' => $item])
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
@@ -194,5 +231,28 @@
         </div>
     </section>
 
-    @include('partials.cta')
+    {{-- Demo & kontak --}}
+    <section id="demo" class="scroll-mt-20 pb-14">
+        <div class="container-page">
+            <div class="grid overflow-hidden rounded-3xl border border-slate-200 shadow-xl shadow-navy-900/5 lg:grid-cols-5">
+                <div class="relative bg-gradient-to-br from-navy-900 via-navy-800 to-brand-700 p-8 text-white lg:col-span-2">
+                    <p class="eyebrow !text-brand-400">Klinik kebutuhan & demo</p>
+                    <h2 class="mt-3 text-2xl font-extrabold sm:text-3xl">{{ \App\Models\Setting::get('cta_title') }}</h2>
+                    <p class="mt-3 text-sm text-slate-200">Sesi 30-45 menit untuk memetakan masalah, dampak, pengguna, sponsor, kesiapan, dan proses pengadaan, dilanjutkan demo sesuai kebutuhan organisasi Anda.</p>
+                    <ul class="mt-6 space-y-2 text-sm text-slate-200">
+                        @foreach (['Libatkan pengambil keputusan dan PIC implementasi', 'Dukungan evaluasi TI, keamanan, pengadaan, dan legal', 'Proposal dengan komponen biaya yang terpisah jelas'] as $point)
+                            <li class="flex gap-2"><x-heroicon-o-check-circle class="mt-0.5 size-4 shrink-0 text-brand-400" /> {{ $point }}</li>
+                        @endforeach
+                    </ul>
+                    <div class="mt-8 space-y-2 text-sm">
+                        <a href="{{ \App\Models\Setting::whatsappUrl() }}" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-brand-400">@include('partials.wa-icon', ['class' => 'size-4']) WhatsApp {{ \App\Models\Setting::get('whatsapp_display') }}</a>
+                        <a href="mailto:{{ \App\Models\Setting::get('email') }}" class="flex items-center gap-2 hover:text-brand-400"><x-heroicon-o-envelope class="size-4" /> {{ \App\Models\Setting::get('email') }}</a>
+                    </div>
+                </div>
+                <div class="bg-white p-8 lg:col-span-3">
+                    @include('partials.lead-form', ['kind' => 'demo', 'formId' => 'home_demo', 'chooseSolution' => true, 'button' => 'Jadwalkan klinik & demo', 'messageLabel' => 'Masalah yang ingin diselesaikan'])
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection

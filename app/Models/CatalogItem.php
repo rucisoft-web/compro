@@ -12,17 +12,28 @@ class CatalogItem extends Model
     public const TYPES = [
         'software' => 'Software',
         'buku' => 'Buku',
+        'webinar' => 'Webinar',
         'workshop' => 'Workshop',
+        'inhouse' => 'In-house & Pilot',
     ];
 
+    /**
+     * Rucisoft Academy offer tiers, from free introduction to paid in-house work.
+     */
+    public const ACADEMY_TYPES = ['webinar', 'workshop', 'inhouse'];
+
     protected $fillable = [
-        'type', 'solution_id', 'title', 'slug', 'summary', 'body', 'cover_image',
-        'event_date', 'location', 'whatsapp_message', 'is_featured', 'is_active', 'sort_order',
+        'type', 'solution_id', 'title', 'subtitle', 'slug', 'summary', 'body', 'outcomes', 'agenda',
+        'registration_open', 'cover_image', 'event_date', 'location', 'audience', 'duration',
+        'price_label', 'whatsapp_message', 'is_featured', 'is_active', 'sort_order',
     ];
 
     protected function casts(): array
     {
         return [
+            'outcomes' => 'array',
+            'agenda' => 'array',
+            'registration_open' => 'boolean',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
         ];
@@ -41,6 +52,11 @@ class CatalogItem extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function isAcademy(): bool
+    {
+        return in_array($this->type, self::ACADEMY_TYPES, true);
     }
 
     public function typeLabel(): string

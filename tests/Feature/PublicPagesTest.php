@@ -29,7 +29,7 @@ class PublicPagesTest extends TestCase
             ->assertSee('Strategi terlaksana. Kinerja terukur.')
             ->assertSee('Ruci Medika')
             ->assertSee('https://notaria.rucisoft.id/img/logo/ruci-notaria.svg', false)
-            ->assertSee('Workshop Praktis')
+            ->assertSee('Workshop praktik')
             ->assertSee('BUMN &amp; BUMD', false)
             ->assertSee('https://wa.me/6281199892939', false);
     }
