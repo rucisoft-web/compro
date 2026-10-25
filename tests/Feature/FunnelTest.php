@@ -123,6 +123,11 @@ class FunnelTest extends TestCase
             ->assertSee('Workshop Mengelola Alur Akta, Repertorium, dan Laporan Bulanan MPD');
 
         // Products without their own pilot scope fall back to the generic one.
+        foreach (['ruci-medika' => 'Satu klinik', 'ruci-prima' => 'general affairs', 'ruci-mufakat' => 'Sekretariat perusahaan'] as $slug => $scope) {
+            $this->get("/solusi/{$slug}")->assertOk()->assertSee($scope)->assertSee('Webinar');
+        }
+
+        Solution::where('slug', 'ruci-medika')->update(['pilot_scope' => null]);
         $this->get('/solusi/ruci-medika')->assertOk()->assertSee('Satu unit kerja, divisi, atau cabang');
     }
 

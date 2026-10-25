@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Sales-funnel content: the "cara bekerja sama" steps, the Ruci BSC pilot scope,
- * and the Rucisoft Academy programs per product (Ruci BSC, Akredia, Ruci Notaria).
+ * and the Rucisoft Academy programs per product (all six products).
  *
  * Safe to run repeatedly; records are matched by number or slug.
  */
@@ -23,6 +23,9 @@ class FunnelSeeder extends Seeder
             $this->seedBsc();
             $this->seedAkredia();
             $this->seedNotaria();
+            $this->seedMedika();
+            $this->seedPrima();
+            $this->seedMufakat();
         });
     }
 
@@ -268,6 +271,249 @@ class FunnelSeeder extends Seeder
                     'Peran dan hak akses staf kantor Anda',
                     'Lingkup dan ukuran keberhasilan pilot',
                     'Satu laporan bulanan MPD dari data nyata',
+                    'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
+                ],
+                'agenda' => null,
+            ],
+        ]);
+    }
+
+    private function seedMedika(): void
+    {
+        $this->seedProduct('ruci-medika', 50, [
+            'problem_statement' => 'Klinik sering menginput data yang sama berkali-kali: pendaftaran, rekam medis, farmasi, dan kasir berjalan terpisah, laporan BPJS dan SATUSEHAT disusun manual, dan antrean pasien sulit dikendalikan.',
+            'pilot_scope' => [
+                ['element' => 'Durasi', 'scope' => 'Usulan awal 30 hari, mencakup satu siklus laporan bulanan'],
+                ['element' => 'Unit', 'scope' => 'Satu klinik, dimulai dari satu atau dua poli'],
+                ['element' => 'Pengguna', 'scope' => 'Pimpinan klinik, pendaftaran, dokter, perawat, farmasi, dan kasir'],
+                ['element' => 'Data', 'scope' => 'Kunjungan pasien, resep, dan transaksi selama masa pilot'],
+                ['element' => 'Pendampingan', 'scope' => 'Kickoff, pemeriksaan kemajuan, dan evaluasi akhir'],
+                ['element' => 'Keberhasilan', 'scope' => 'Kunjungan tercatat di rekam medis elektronik, data terkirim ke P-Care/SATUSEHAT, dan satu laporan bulanan dibuat dari sistem'],
+                ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
+            ],
+        ], [
+            [
+                'type' => 'webinar',
+                'slug' => 'webinar-klinik-tanpa-input-ulang',
+                'title' => 'Webinar: Klinik Tanpa Input Ulang, dari Pendaftaran sampai Laporan BPJS',
+                'subtitle' => 'Mengenal alur kerja klinik terpadu bersama Ruci Medika',
+                'summary' => 'Sesi 60-90 menit dengan studi kasus: di mana waktu dan data klinik hilang, apa yang dibutuhkan untuk BPJS P-Care dan SATUSEHAT, dan bagaimana laporan bulanan dibuat tanpa rekap manual.',
+                'audience' => 'Pemilik dan pimpinan klinik, dokter penanggung jawab, serta staf administrasi klinik',
+                'duration' => '60-90 menit',
+                'location' => 'Online',
+                'price_label' => 'Gratis, dengan pendaftaran',
+                'outcomes' => [
+                    'Peta alur pasien dan titik input ganda di klinik',
+                    'Gambaran kewajiban integrasi P-Care dan SATUSEHAT',
+                    'Checklist kesiapan rekam medis elektronik',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah operasional klinik', 'portion' => '25%', 'content' => 'Mengapa data diinput berulang dan laporan selalu terlambat'],
+                    ['part' => 'Studi kasus', 'portion' => '45%', 'content' => 'Dari pendaftaran dan antrean sampai laporan LB1 dan KBK BPJS'],
+                    ['part' => 'Demo singkat & tanya jawab', 'portion' => '30%', 'content' => 'Melihat alur kerja di Ruci Medika'],
+                ],
+            ],
+            [
+                'type' => 'workshop',
+                'slug' => 'workshop-alur-pasien-rekam-medis-laporan-klinik',
+                'title' => 'Workshop Menata Alur Pasien, Rekam Medis Elektronik, dan Laporan Klinik yang Siap Diperiksa',
+                'subtitle' => 'Praktik menggunakan perangkat lunak Ruci Medika',
+                'summary' => 'Workshop praktik setengah hari atau satu hari. Peserta menjalankan alur pasien dari pendaftaran, pemeriksaan SOAP, e-resep, sampai kasir, lalu menyusun laporan bulanan dan indikator mutu langsung di aplikasi.',
+                'audience' => 'Pimpinan klinik, dokter, perawat, petugas farmasi, dan administrasi klinik',
+                'duration' => 'Setengah hari / 1 hari',
+                'location' => 'Online atau tatap muka',
+                'price_label' => 'Berbayar per peserta atau per klinik',
+                'outcomes' => [
+                    'Alur pasien klinik Anda dari pendaftaran sampai kasir',
+                    'Contoh rekam medis SOAP dengan ICD-10',
+                    'Pengaturan stok farmasi per batch dan kedaluwarsa',
+                    'Contoh laporan LB1, kunjungan, dan pendapatan',
+                    'Daftar indikator mutu dan kebutuhan akreditasi klinik',
+                    'Hasil praktik yang bisa diekspor',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah dan pendekatan', 'portion' => '20%', 'content' => 'Titik rawan alur pasien dan kewajiban pelaporan klinik'],
+                    ['part' => 'Praktik terpandu', 'portion' => '50%', 'content' => 'Pendaftaran, SOAP, e-resep, kasir, dan laporan dalam aplikasi'],
+                    ['part' => 'Pembahasan hasil', 'portion' => '20%', 'content' => 'Meninjau hasil praktik peserta dan kesiapan klinik'],
+                    ['part' => 'Rencana implementasi', 'portion' => '10%', 'content' => 'Tahapan penerapan, migrasi data, integrasi, dukungan, dan pilihan paket'],
+                ],
+            ],
+            [
+                'type' => 'inhouse',
+                'slug' => 'pelatihan-klinik-dan-pilot-ruci-medika',
+                'title' => 'Pelatihan Klinik & Pilot Ruci Medika',
+                'subtitle' => 'Untuk klinik yang siap beralih ke rekam medis elektronik',
+                'summary' => 'Pelatihan khusus untuk seluruh tim klinik Anda, dilanjutkan pilot terbatas yang didampingi selama satu siklus laporan bulanan, dengan ukuran keberhasilan dan jadwal keputusan yang disepakati di awal.',
+                'audience' => 'Klinik pratama dan klinik utama',
+                'duration' => 'Pelatihan 1 hari, pilot usulan 30 hari',
+                'location' => 'Di klinik Anda atau online',
+                'price_label' => 'Sesuai lingkup',
+                'outcomes' => [
+                    'Peran dan hak akses tim klinik Anda',
+                    'Lingkup dan ukuran keberhasilan pilot',
+                    'Satu laporan bulanan dari data nyata',
+                    'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
+                ],
+                'agenda' => null,
+            ],
+        ]);
+    }
+
+    private function seedPrima(): void
+    {
+        $this->seedProduct('ruci-prima', 60, [
+            'problem_statement' => 'Aset, ruang rapat, kendaraan, dan perizinan perusahaan sering dicatat di spreadsheet yang berbeda: jadwal bentrok, aset sulit dilacak, izin kedaluwarsa tanpa peringatan, dan pimpinan tidak punya gambaran utuh.',
+            'pilot_scope' => [
+                ['element' => 'Durasi', 'scope' => 'Usulan awal 30 hari, disesuaikan kebutuhan'],
+                ['element' => 'Unit', 'scope' => 'Bagian umum atau general affairs, dengan satu lokasi kantor'],
+                ['element' => 'Pengguna', 'scope' => 'Pimpinan, staf general affairs, administrator, dan beberapa pemohon dari unit'],
+                ['element' => 'Data', 'scope' => 'Sejumlah aset, ruang rapat, kendaraan, dan izin yang disepakati'],
+                ['element' => 'Pendampingan', 'scope' => 'Kickoff, pemeriksaan kemajuan, dan evaluasi akhir'],
+                ['element' => 'Keberhasilan', 'scope' => 'Aset dan izin tercatat, pemesanan ruang dan kendaraan berjalan di aplikasi, dan dasbor dipakai dalam satu rapat pimpinan'],
+                ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
+            ],
+        ], [
+            [
+                'type' => 'webinar',
+                'slug' => 'webinar-fasilitas-tertata-keputusan-lebih-jernih',
+                'title' => 'Webinar: Fasilitas Tertata, Keputusan Lebih Jernih',
+                'subtitle' => 'Mengelola ruang, inventaris, kendaraan, dan perizinan bersama Ruci PRIMA',
+                'summary' => 'Sesi 60-90 menit dengan studi kasus: biaya tersembunyi dari aset yang tidak terlacak, jadwal ruang dan kendaraan yang bentrok, serta izin yang kedaluwarsa, dan cara pimpinan memantau semuanya dari satu dasbor.',
+                'audience' => 'Pimpinan perusahaan, kepala general affairs, dan pengelola aset atau fasilitas',
+                'duration' => '60-90 menit',
+                'location' => 'Online',
+                'price_label' => 'Gratis, dengan pendaftaran',
+                'outcomes' => [
+                    'Peta masalah pengelolaan fasilitas dan aset',
+                    'Contoh register aset dan izin yang rapi',
+                    'Checklist kesiapan digitalisasi general affairs',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah pengelolaan fasilitas', 'portion' => '25%', 'content' => 'Mengapa aset, ruang, dan izin sulit dikendalikan dengan spreadsheet'],
+                    ['part' => 'Studi kasus', 'portion' => '45%', 'content' => 'Dari pemesanan ruang dan kendaraan sampai dasbor pimpinan'],
+                    ['part' => 'Demo singkat & tanya jawab', 'portion' => '30%', 'content' => 'Melihat alur kerja di Ruci PRIMA'],
+                ],
+            ],
+            [
+                'type' => 'workshop',
+                'slug' => 'workshop-register-aset-ruang-kendaraan-perizinan',
+                'title' => 'Workshop Menyusun Register Aset, Jadwal Ruang & Kendaraan, dan Pemantauan Perizinan Perusahaan',
+                'subtitle' => 'Praktik menggunakan perangkat lunak Ruci PRIMA',
+                'summary' => 'Workshop praktik setengah hari atau satu hari. Peserta mencatat aset dan inventaris, mengatur pemesanan ruang dan kendaraan, memasang pengingat perizinan, dan menyiapkan dasbor pimpinan langsung di aplikasi.',
+                'audience' => 'Tim general affairs, pengelola aset, fasilitas, dan administrasi perusahaan',
+                'duration' => 'Setengah hari / 1 hari',
+                'location' => 'Online atau tatap muka',
+                'price_label' => 'Berbayar per peserta atau per tim',
+                'outcomes' => [
+                    'Register aset dan inventaris dengan penanggung jawab',
+                    'Aturan pemesanan ruang rapat dan kendaraan',
+                    'Daftar izin perusahaan beserta pengingat masa berlaku',
+                    'Contoh dasbor fasilitas untuk pimpinan',
+                    'Pembagian peran dan hak akses tim',
+                    'Hasil praktik yang bisa diekspor',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah dan pendekatan', 'portion' => '20%', 'content' => 'Biaya dan risiko dari fasilitas yang tidak terkelola'],
+                    ['part' => 'Praktik terpandu', 'portion' => '50%', 'content' => 'Mencatat aset, mengatur ruang dan kendaraan, serta perizinan dalam aplikasi'],
+                    ['part' => 'Pembahasan hasil', 'portion' => '20%', 'content' => 'Meninjau hasil praktik peserta dan kesiapan penerapan'],
+                    ['part' => 'Rencana implementasi', 'portion' => '10%', 'content' => 'Tahapan penerapan, migrasi data, dukungan, dan pilihan paket'],
+                ],
+            ],
+            [
+                'type' => 'inhouse',
+                'slug' => 'workshop-in-house-dan-pilot-ruci-prima',
+                'title' => 'Workshop In-House & Pilot Ruci PRIMA',
+                'subtitle' => 'Untuk perusahaan yang ingin menertibkan aset dan fasilitas',
+                'summary' => 'Workshop khusus tim Anda dengan data aset dan fasilitas perusahaan sendiri, dilanjutkan pilot terbatas yang didampingi, dengan ukuran keberhasilan dan jadwal keputusan yang disepakati di awal.',
+                'audience' => 'Perusahaan, perhotelan dan MICE, transportasi, serta industri makanan dan rantai dingin',
+                'duration' => 'Workshop 1 hari, pilot usulan 30 hari',
+                'location' => 'Di lokasi Anda atau online',
+                'price_label' => 'Sesuai lingkup',
+                'outcomes' => [
+                    'Register aset dan fasilitas perusahaan Anda',
+                    'Lingkup dan ukuran keberhasilan pilot',
+                    'Satu rapat pimpinan dengan dasbor nyata',
+                    'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
+                ],
+                'agenda' => null,
+            ],
+        ]);
+    }
+
+    private function seedMufakat(): void
+    {
+        $this->seedProduct('ruci-mufakat', 70, [
+            'problem_statement' => 'Bahan rapat Direksi dan Dewan Komisaris sering tersebar di email dan grup pesan, keputusan sulit ditelusuri sumbernya, dan tindak lanjut dinyatakan selesai tanpa bukti yang bisa diverifikasi.',
+            'pilot_scope' => [
+                ['element' => 'Durasi', 'scope' => 'Usulan awal 30-60 hari, mencakup satu siklus rapat'],
+                ['element' => 'Unit', 'scope' => 'Sekretariat perusahaan bersama Direksi atau Dewan Komisaris'],
+                ['element' => 'Pengguna', 'scope' => 'Sekretaris perusahaan, anggota Direksi atau Dewan Komisaris, dan beberapa PIC tindak lanjut'],
+                ['element' => 'Data', 'scope' => 'Agenda, bahan, dan keputusan dari rapat yang berjalan selama pilot'],
+                ['element' => 'Pendampingan', 'scope' => 'Kickoff, pemeriksaan kemajuan, dan evaluasi akhir'],
+                ['element' => 'Keberhasilan', 'scope' => 'Satu rapat berjalan penuh di aplikasi, keputusan tercatat beserta sumbernya, dan tindak lanjut ditutup dengan bukti terverifikasi'],
+                ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
+            ],
+        ], [
+            [
+                'type' => 'webinar',
+                'slug' => 'webinar-rapat-direksi-keputusan-tindak-lanjut-terbukti',
+                'title' => 'Webinar: Rapat Direksi dan Komisaris yang Keputusannya Terlacak dan Tindak Lanjutnya Terbukti',
+                'subtitle' => 'Praktik tata kelola rapat bersama Ruci MUFAKAT',
+                'summary' => 'Sesi 60-90 menit dengan studi kasus: mengapa keputusan rapat sering berhenti di notulen, bagaimana memisahkan fungsi pengurusan dan pengawasan, dan cara membuktikan tindak lanjut sudah benar-benar selesai.',
+                'audience' => 'Direksi, Dewan Komisaris, sekretaris perusahaan, dan komite',
+                'duration' => '60-90 menit',
+                'location' => 'Online',
+                'price_label' => 'Gratis, dengan pendaftaran',
+                'outcomes' => [
+                    'Peta risiko tata kelola rapat dan keputusan',
+                    'Contoh risalah, keputusan, dan bukti tindak lanjut yang baik',
+                    'Checklist kesiapan board management digital',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah tata kelola rapat', 'portion' => '25%', 'content' => 'Mengapa keputusan sulit ditelusuri dan tindak lanjut tidak terbukti'],
+                    ['part' => 'Studi kasus', 'portion' => '45%', 'content' => 'Dari usulan dan agenda sampai keputusan dan verifikasi tindak lanjut'],
+                    ['part' => 'Demo singkat & tanya jawab', 'portion' => '30%', 'content' => 'Melihat alur kerja di Ruci MUFAKAT'],
+                ],
+            ],
+            [
+                'type' => 'workshop',
+                'slug' => 'workshop-agenda-keputusan-tindak-lanjut-rapat-direksi',
+                'title' => 'Workshop Menyusun Agenda, Keputusan, dan Tindak Lanjut Rapat Direksi & Dewan Komisaris yang Dapat Diverifikasi',
+                'subtitle' => 'Praktik menggunakan perangkat lunak Ruci MUFAKAT',
+                'summary' => 'Workshop praktik setengah hari. Peserta menyiapkan usulan dan agenda, mengelola bahan rapat, mencatat keputusan beserta sumbernya, dan menutup tindak lanjut dengan bukti langsung di aplikasi.',
+                'audience' => 'Sekretaris perusahaan, staf sekretariat Direksi dan Dewan Komisaris, serta komite',
+                'duration' => 'Setengah hari',
+                'location' => 'Online atau tatap muka',
+                'price_label' => 'Berbayar per peserta atau per tim',
+                'outcomes' => [
+                    'Alur usulan, agenda, dan bahan rapat organisasi Anda',
+                    'Contoh keputusan yang tercatat beserta sumbernya',
+                    'Daftar tindak lanjut dengan PIC dan bukti penyelesaian',
+                    'Pemisahan akses pengurusan dan pengawasan',
+                    'Contoh laporan akuntabilitas Direksi dan Dewan Komisaris',
+                    'Hasil praktik yang bisa diekspor',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah dan pendekatan', 'portion' => '20%', 'content' => 'Risiko tata kelola dari rapat yang tidak terdokumentasi'],
+                    ['part' => 'Praktik terpandu', 'portion' => '50%', 'content' => 'Menyusun agenda, mencatat keputusan, dan memverifikasi tindak lanjut dalam aplikasi'],
+                    ['part' => 'Pembahasan hasil', 'portion' => '20%', 'content' => 'Meninjau hasil praktik peserta dan kesiapan penerapan'],
+                    ['part' => 'Rencana implementasi', 'portion' => '10%', 'content' => 'Tahapan penerapan, keamanan data, dukungan, dan pilihan paket'],
+                ],
+            ],
+            [
+                'type' => 'inhouse',
+                'slug' => 'sesi-in-house-dan-pilot-ruci-mufakat',
+                'title' => 'Sesi In-House & Pilot Ruci MUFAKAT',
+                'subtitle' => 'Untuk Direksi dan Dewan Komisaris yang ingin rapat dan keputusannya terdokumentasi',
+                'summary' => 'Sesi khusus bersama sekretariat, Direksi, atau Dewan Komisaris Anda, dilanjutkan pilot terbatas yang didampingi selama satu siklus rapat, dengan ukuran keberhasilan dan jadwal keputusan yang disepakati di awal.',
+                'audience' => 'BUMN, BUMD, perusahaan terbuka, dan perusahaan keluarga',
+                'duration' => 'Sesi 1 hari, pilot usulan 30-60 hari',
+                'location' => 'Di lokasi Anda atau online',
+                'price_label' => 'Sesuai lingkup',
+                'outcomes' => [
+                    'Alur rapat dan hak akses organisasi Anda',
+                    'Lingkup dan ukuran keberhasilan pilot',
+                    'Satu rapat penuh dengan keputusan dan tindak lanjut terverifikasi',
                     'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
                 ],
                 'agenda' => null,
