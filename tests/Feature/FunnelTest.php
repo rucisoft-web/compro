@@ -127,6 +127,9 @@ class FunnelTest extends TestCase
             $this->get("/solusi/{$slug}")->assertOk()->assertSee($scope)->assertSee('Webinar');
         }
 
+        // Links from the product apps open a specific tab, e.g. ?langkah=pilot#mulai.
+        $this->get('/solusi/ruci-bsc?langkah=pilot')->assertOk()->assertSee("tab: 'pilot'", false);
+
         Solution::where('slug', 'ruci-medika')->update(['pilot_scope' => null]);
         $this->get('/solusi/ruci-medika')->assertOk()->assertSee('Satu unit kerja, divisi, atau cabang');
     }

@@ -14,7 +14,8 @@
         'proposal' => ['Minta proposal', 'Kebutuhan sudah jelas? Kami siapkan proposal yang memisahkan lisensi, implementasi, migrasi, pelatihan, dan pendampingan.', 'Minta proposal', 'Lingkup, jumlah pengguna/entitas, dan proses pengadaan'],
         'asesmen' => ['Asesmen kebutuhan', 'Belum yakin? Jawab beberapa pertanyaan singkat, kami bantu menyarankan langkah yang paling sesuai.', 'Kirim asesmen', 'Catatan tambahan'],
     ];
-    $openTab = collect(array_keys($tabs))->first(fn ($kind) => $errors->getBag('sol_'.$kind)->any()) ?? 'demo';
+    $openTab = collect(array_keys($tabs))->first(fn ($kind) => $errors->getBag('sol_'.$kind)->any())
+        ?? (is_string($langkah = request('langkah')) && isset($tabs[$langkah]) ? $langkah : 'demo'); // ?langkah=pilot dari situs produk
 @endphp
 
 {{-- Jalur --}}
