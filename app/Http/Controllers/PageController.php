@@ -31,7 +31,7 @@ class PageController extends Controller
 
         return view('pages.solution', [
             'solution' => $solution,
-            'related' => $solution->catalogItems()->active()->get(),
+            'related' => $solution->catalogItems()->active()->where('type', '!=', 'software')->get(),
             'others' => Solution::active()->whereKeyNot($solution->id)->get(),
         ]);
     }

@@ -1,6 +1,6 @@
-<section class="py-20">
+<section class="py-14">
     <div class="container-page">
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 via-navy-800 to-brand-700 px-6 py-14 text-center sm:px-12">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 via-navy-800 to-brand-700 px-6 py-12 text-center sm:px-12">
             <div class="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-brand-400/20 blur-3xl"></div>
             <div class="pointer-events-none absolute -bottom-24 -left-24 size-72 rounded-full bg-brand-500/20 blur-3xl"></div>
             <h2 class="relative mx-auto max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">{{ \App\Models\Setting::get('cta_title') }}</h2>
