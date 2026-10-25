@@ -121,6 +121,6 @@ php artisan db:seed --class=FunnelSeeder --force
 php artisan optimize:clear && php artisan optimize
 ```
 
-`FunnelSeeder` mengganti 6 tahapan "Cara Kerja Sama", mengisi masalah & lingkup pilot Ruci BSC, serta membuat 3 acara Academy untuk Ruci BSC dan Akredia (webinar, workshop, in-house/pilot); Akredia juga mendapat masalah & lingkup pilotnya sendiri. Aman dijalankan ulang.
+`FunnelSeeder` mengganti 6 tahapan "Cara Kerja Sama", serta membuat 3 acara Academy untuk Ruci BSC, Akredia, dan Ruci Notaria (webinar, workshop, in-house/pilot); ketiganya juga mendapat masalah & lingkup pilotnya sendiri. Aman dijalankan ulang.
 
 Agar setiap prospek baru juga dikirim ke email, isi SMTP di `.env` (`MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`). Tanpa SMTP, prospek tetap tersimpan dan bisa dilihat di admin → CRM → Prospek Masuk.

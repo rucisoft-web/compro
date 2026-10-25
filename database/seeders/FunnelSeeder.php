@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Sales-funnel content: the "cara bekerja sama" steps, the Ruci BSC pilot scope,
- * and the Rucisoft Academy programs per product (Ruci BSC, Akredia).
+ * and the Rucisoft Academy programs per product (Ruci BSC, Akredia, Ruci Notaria).
  *
  * Safe to run repeatedly; records are matched by number or slug.
  */
@@ -22,6 +22,7 @@ class FunnelSeeder extends Seeder
             $this->seedStages();
             $this->seedBsc();
             $this->seedAkredia();
+            $this->seedNotaria();
         });
     }
 
@@ -190,6 +191,83 @@ class FunnelSeeder extends Seeder
                     'Peta indikator dan bukti institusi Anda',
                     'Lingkup dan ukuran keberhasilan pilot',
                     'Satu tinjauan kesiapan bersama pimpinan',
+                    'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
+                ],
+                'agenda' => null,
+            ],
+        ]);
+    }
+
+    private function seedNotaria(): void
+    {
+        $this->seedProduct('ruci-notaria', 40, [
+            'problem_statement' => 'Kantor notaris bekerja dengan tenggat dan aturan yang ketat: berkas dan draf akta tersebar, nomor repertorium rawan salah, laporan bulanan MPD disusun manual, dan tenggat AHU atau PPAT mudah terlewat.',
+            'pilot_scope' => [
+                ['element' => 'Durasi', 'scope' => 'Usulan awal 30 hari, mencakup satu siklus laporan bulanan MPD'],
+                ['element' => 'Unit', 'scope' => 'Satu kantor Notaris & PPAT'],
+                ['element' => 'Pengguna', 'scope' => 'Notaris, staf akta, bagian keuangan, dan arsiparis'],
+                ['element' => 'Data', 'scope' => 'Berkas klien dan akta yang berjalan selama masa pilot'],
+                ['element' => 'Pendampingan', 'scope' => 'Kickoff, pemeriksaan kemajuan, dan evaluasi akhir'],
+                ['element' => 'Keberhasilan', 'scope' => 'Akta tercatat dan bernomor di aplikasi, tenggat AHU/PPAT terpantau, dan satu laporan bulanan MPD dibuat dari sistem'],
+                ['element' => 'Keputusan akhir', 'scope' => 'Lanjut, perbaiki lingkup, atau tidak melanjutkan'],
+            ],
+        ], [
+            [
+                'type' => 'webinar',
+                'slug' => 'webinar-kantor-notaris-rapi-siap-diperiksa-mpd',
+                'title' => 'Webinar: Kantor Notaris yang Rapi, Patuh UUJN, dan Siap Diperiksa MPD',
+                'subtitle' => 'Mengenal alur kerja kantor Notaris & PPAT bersama Ruci Notaria',
+                'summary' => 'Sesi 60-90 menit dengan studi kasus: di mana risiko kepatuhan biasanya muncul di kantor notaris, apa yang diperiksa MPD, dan bagaimana register, laporan, dan tenggat dikelola tanpa catatan manual.',
+                'audience' => 'Notaris, PPAT, calon notaris, dan staf kantor notaris',
+                'duration' => '60-90 menit',
+                'location' => 'Online',
+                'price_label' => 'Gratis, dengan pendaftaran',
+                'outcomes' => ['Peta risiko kepatuhan UUJN di kantor notaris', 'Contoh register dan laporan bulanan MPD yang rapi', 'Checklist kesiapan digitalisasi kantor'],
+                'agenda' => [
+                    ['part' => 'Masalah kepatuhan kantor notaris', 'portion' => '25%', 'content' => 'Di mana kesalahan nomor akta, register, dan tenggat biasanya terjadi'],
+                    ['part' => 'Studi kasus', 'portion' => '45%', 'content' => 'Dari penerimaan klien sampai laporan bulanan MPD dan penjilidan protokol'],
+                    ['part' => 'Demo singkat & tanya jawab', 'portion' => '30%', 'content' => 'Melihat alur kerja di Ruci Notaria'],
+                ],
+            ],
+            [
+                'type' => 'workshop',
+                'slug' => 'workshop-alur-akta-repertorium-laporan-mpd',
+                'title' => 'Workshop Mengelola Alur Akta, Repertorium, dan Laporan Bulanan MPD yang Patuh UUJN',
+                'subtitle' => 'Praktik menggunakan perangkat lunak Ruci Notaria',
+                'summary' => 'Workshop praktik setengah hari atau satu hari. Peserta mencatat klien dan berkas, menyiapkan draf akta, menjalankan cek kesiapan akta, memberi nomor repertorium, dan membuat laporan bulanan MPD langsung di aplikasi.',
+                'audience' => 'Notaris, PPAT, dan staf akta atau administrasi kantor notaris',
+                'duration' => 'Setengah hari / 1 hari',
+                'location' => 'Online atau tatap muka',
+                'price_label' => 'Berbayar per peserta atau per kantor',
+                'outcomes' => [
+                    'Alur kerja berkas dari penerimaan klien sampai protokol',
+                    'Contoh cek kesiapan akta berbasis aturan UUJN',
+                    'Repertorium, klapper, dan register legalisasi/waarmerking',
+                    'Draf laporan bulanan MPD beserta surat pengantar',
+                    'Daftar tenggat AHU dan PPAT kantor Anda',
+                    'Hasil praktik yang bisa diekspor',
+                ],
+                'agenda' => [
+                    ['part' => 'Masalah dan pendekatan', 'portion' => '20%', 'content' => 'Risiko kepatuhan yang umum ditemui dan apa yang diperiksa MPD'],
+                    ['part' => 'Praktik terpandu', 'portion' => '50%', 'content' => 'Mencatat berkas, cek kesiapan akta, penomoran repertorium, dan laporan MPD dalam aplikasi'],
+                    ['part' => 'Pembahasan hasil', 'portion' => '20%', 'content' => 'Meninjau hasil praktik peserta dan kesiapan kantor'],
+                    ['part' => 'Rencana implementasi', 'portion' => '10%', 'content' => 'Tahapan penerapan, migrasi data, dukungan, dan pilihan paket'],
+                ],
+            ],
+            [
+                'type' => 'inhouse',
+                'slug' => 'pelatihan-kantor-dan-pilot-ruci-notaria',
+                'title' => 'Pelatihan Kantor & Pilot Ruci Notaria',
+                'subtitle' => 'Untuk kantor Notaris & PPAT yang siap beralih dari catatan manual',
+                'summary' => 'Pelatihan khusus untuk notaris dan seluruh staf di kantor Anda, dilanjutkan pilot terbatas yang didampingi selama satu siklus laporan MPD, dengan ukuran keberhasilan dan jadwal keputusan yang disepakati di awal.',
+                'audience' => 'Kantor Notaris & PPAT',
+                'duration' => 'Pelatihan 1 hari, pilot usulan 30 hari',
+                'location' => 'Di kantor Anda atau online',
+                'price_label' => 'Sesuai lingkup',
+                'outcomes' => [
+                    'Peran dan hak akses staf kantor Anda',
+                    'Lingkup dan ukuran keberhasilan pilot',
+                    'Satu laporan bulanan MPD dari data nyata',
                     'Rekomendasi lanjut, perbaiki lingkup, atau berhenti',
                 ],
                 'agenda' => null,
