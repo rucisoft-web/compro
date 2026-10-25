@@ -124,3 +124,18 @@ php artisan optimize:clear && php artisan optimize
 `FunnelSeeder` mengganti 6 tahapan "Cara Kerja Sama", serta membuat 3 acara Academy untuk keenam produk (webinar, workshop, in-house/pilot); setiap produk juga mendapat masalah & lingkup pilotnya sendiri. Aman dijalankan ulang.
 
 Agar setiap prospek baru juga dikirim ke email, isi SMTP di `.env` (`MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`). Tanpa SMTP, prospek tetap tersimpan dan bisa dilihat di admin → CRM → Prospek Masuk.
+
+## Update: Konten Media Sosial
+
+Menu baru **Pemasaran → Konten Media Sosial** di admin untuk menyimpan artikel dan caption per produk, lengkap dengan platform, tahap funnel, status (draf, siap, terjadwal, sudah diposting), jadwal tayang, gambar utama, dan galeri screenshot/grafik. Tombol **Salin teks** menyalin teks, link rucisoft.id ber-UTM, dan tagar sekaligus.
+
+```bash
+cd ~/compro
+git pull
+php artisan migrate --force
+php artisan storage:link   # sekali saja; abaikan bila sudah ada
+php artisan db:seed --class=SocialPostSeeder --force
+php artisan optimize:clear && php artisan optimize
+```
+
+`SocialPostSeeder` menambahkan 6 artikel (satu per produk) beserta infografis dan screenshot aplikasi. Artikel yang statusnya sudah bukan draf tidak akan ditimpa bila seeder dijalankan ulang.
