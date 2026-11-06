@@ -6,6 +6,7 @@ use App\Models\CatalogItem;
 use App\Models\ClientSegment;
 use App\Models\DashboardMetric;
 use App\Models\Principle;
+use App\Models\SoftwareCategory;
 use App\Models\Solution;
 use App\Models\Stage;
 use Illuminate\Http\Request;
@@ -15,8 +16,11 @@ class PageController extends Controller
 {
     public function home(): View
     {
+        $solutions = Solution::active()->get();
+
         return view('pages.home', [
-            'solutions' => Solution::active()->get(),
+            'solutions' => $solutions,
+            'categories' => SoftwareCategory::withProducts($solutions),
             'catalog' => CatalogItem::active()->with('solution')->whereNotIn('type', CatalogItem::ACADEMY_TYPES)->get(),
             'events' => CatalogItem::active()->with('solution')->whereIn('type', CatalogItem::ACADEMY_TYPES)->limit(3)->get(),
             'stages' => Stage::orderBy('sort_order')->get(),
@@ -34,7 +38,10 @@ class PageController extends Controller
             'solution' => $solution,
             'events' => $solution->academyItems()->active()->get(),
             'related' => $solution->catalogItems()->active()->where('type', 'buku')->get(),
-            'others' => Solution::active()->whereKeyNot($solution->id)->get(),
+            'others' => Solution::active()->with('category')->whereKeyNot($solution->id)->get()
+                ->sortBy(fn (Solution $s) => $solution->software_category_id && $s->software_category_id === $solution->software_category_id ? 0 : 1, SORT_NUMERIC)
+                ->take(5)
+                ->values(),
         ]);
     }
 

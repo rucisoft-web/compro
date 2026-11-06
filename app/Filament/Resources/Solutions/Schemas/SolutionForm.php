@@ -31,6 +31,13 @@ class SolutionForm
         'heroicon-o-document-text' => 'Dokumen (notaris)',
         'heroicon-o-heart' => 'Hati (kesehatan)',
         'heroicon-o-user-group' => 'Kelompok (rapat)',
+        'heroicon-o-wrench-screwdriver' => 'Kunci (pemeliharaan)',
+        'heroicon-o-calendar-days' => 'Kalender (proyek)',
+        'heroicon-o-building-storefront' => 'Toko (ritel)',
+        'heroicon-o-identification' => 'Kartu identitas',
+        'heroicon-o-document-check' => 'Dokumen terverifikasi (izin)',
+        'heroicon-o-cpu-chip' => 'Chip (TI)',
+        'heroicon-o-banknotes' => 'Uang (keuangan)',
     ];
 
     public static function configure(Schema $schema): Schema
@@ -50,6 +57,12 @@ class SolutionForm
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->helperText('Dipakai di alamat halaman: /solusi/slug'),
+                        Select::make('software_category_id')
+                            ->label('Kategori software')
+                            ->relationship('category', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->columnSpanFull(),
                         TextInput::make('tagline')
                             ->label('Deskripsi singkat')
                             ->required()

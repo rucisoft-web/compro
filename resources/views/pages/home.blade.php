@@ -67,50 +67,54 @@
     </section>
 
     {{-- Solusi --}}
-    <section id="solusi" class="py-16">
+    <section id="solusi" class="scroll-mt-20 py-16" x-data="{ kat: (location.hash.match(/^#kategori-(.+)$/) || [])[1] || 'semua' }"
+             @hashchange.window="const m = location.hash.match(/^#kategori-(.+)$/); if (m) { kat = m[1]; $nextTick(() => document.getElementById('kategori-' + m[1])?.scrollIntoView()) }">
         <div class="container-page">
             <div class="max-w-2xl">
                 <p class="eyebrow">Solusi</p>
                 <h2 class="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">Produk aplikasi Rucisoft</h2>
-                <p class="mt-4 text-slate-600">Aplikasi siap pakai untuk strategi perusahaan, akreditasi perguruan tinggi, fasilitas kantor, kantor notaris, klinik, hingga rapat Direksi dan Dewan Komisaris.</p>
+                <p class="mt-4 text-slate-600">{{ $solutions->count() }} aplikasi siap pakai, dikelompokkan menurut kebutuhan: strategi dan kinerja, tata kelola dan kepatuhan, aset dan fasilitas, proyek dan layanan TI, pelanggan, hingga klinik dan kantor profesi.</p>
             </div>
 
-            <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                @foreach ($solutions as $solution)
-                    @php($fallbackImage = $solution->fallbackImageUrl())
-                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-lg hover:shadow-navy-900/5">
-                        <a href="{{ route('solutions.show', $solution) }}" class="block aspect-[16/9] overflow-hidden border-b border-slate-100 bg-slate-100">
-                            @if ($solution->imageUrl())
-                                <img src="{{ $solution->imageUrl() }}" alt="Tampilan {{ $solution->name }}" loading="lazy"
-                                     class="size-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
-                                     @if ($fallbackImage) onerror="this.onerror=null;this.src='{{ $fallbackImage }}'" @endif>
+            @if ($categories->count() > 1)
+                <div class="-mx-4 mt-8 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" aria-label="Kategori produk">
+                    <button type="button" @click="kat = 'semua'" :class="kat === 'semua' ? 'border-navy-900 bg-navy-900 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-brand-400'" class="shrink-0 rounded-full border px-4 py-1.5 text-sm font-semibold transition">
+                        Semua <span class="opacity-60">{{ $solutions->count() }}</span>
+                    </button>
+                    @foreach ($categories as $category)
+                        <button type="button" @click="kat = '{{ $category->slug }}'" :class="kat === '{{ $category->slug }}' ? 'border-navy-900 bg-navy-900 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-brand-400'" class="shrink-0 rounded-full border px-4 py-1.5 text-sm font-semibold transition">
+                            {{ $category->name }} <span class="opacity-60">{{ $category->items->count() }}</span>
+                        </button>
+                    @endforeach
+                </div>
+            @endif
+
+            @foreach ($categories as $category)
+                <div id="kategori-{{ $category->slug }}" class="mt-10 scroll-mt-24" x-show="kat === 'semua' || kat === '{{ $category->slug }}'">
+                    @if ($category->exists)
+                        <div class="flex items-start gap-3">
+                            @if ($category->icon)
+                                <span class="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+                                    <x-dynamic-component :component="$category->icon" class="size-5" />
+                                </span>
                             @endif
-                        </a>
-                        <div class="flex flex-1 flex-col p-5">
-                            <div class="flex h-10 items-center">
-                                @include('partials.product-logo', ['solution' => $solution, 'class' => 'h-10'])
-                            </div>
-                            <h3 class="mt-3 text-base font-bold text-navy-900">{{ $solution->name }}</h3>
-                            <p class="mt-1 text-sm leading-relaxed text-slate-600">{{ $solution->tagline }}</p>
-                            <ul class="mt-4 flex-1 space-y-1.5 text-[13px] text-slate-700">
-                                @foreach (array_slice($solution->features ?? [], 0, 4) as $feature)
-                                    <li class="flex gap-2"><x-heroicon-o-check-circle class="mt-0.5 size-4 shrink-0 text-brand-500" /> {{ $feature }}</li>
-                                @endforeach
-                            </ul>
-                            <div class="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
-                                <a href="{{ route('solutions.show', $solution) }}" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 group-hover:gap-2">
-                                    Lihat detail <x-heroicon-o-arrow-right class="size-4 transition-all" />
-                                </a>
-                                @if ($solution->website_url)
-                                    <a href="{{ $solution->website_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-sm font-semibold text-slate-500 hover:text-navy-900">
-                                        Coba demo <x-heroicon-o-arrow-top-right-on-square class="size-4" />
-                                    </a>
+                            <div>
+                                <h3 class="text-lg font-extrabold text-navy-900">{{ $category->name }}</h3>
+                                @if ($category->description)
+                                    <p class="mt-0.5 max-w-3xl text-sm text-slate-600">{{ $category->description }}</p>
                                 @endif
                             </div>
                         </div>
-                    </article>
-                @endforeach
-            </div>
+                    @elseif ($categories->count() > 1)
+                        <h3 class="text-lg font-extrabold text-navy-900">{{ $category->name }}</h3>
+                    @endif
+                    <div class="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                        @foreach ($category->items as $solution)
+                            @include('partials.product-card', ['solution' => $solution])
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
         </div>
     </section>
 

@@ -14,6 +14,10 @@
                 <x-heroicon-o-chevron-right class="size-3.5" />
                 <a href="{{ route('home') }}#solusi" class="hover:text-brand-600">Solusi</a>
                 <x-heroicon-o-chevron-right class="size-3.5" />
+                @if ($solution->category)
+                    <a href="{{ route('home') }}#kategori-{{ $solution->category->slug }}" class="hover:text-brand-600">{{ $solution->category->name }}</a>
+                    <x-heroicon-o-chevron-right class="size-3.5" />
+                @endif
                 <span class="font-medium text-navy-900">{{ $solution->name }}</span>
             </nav>
 
@@ -118,7 +122,7 @@
     {{-- Solusi lainnya --}}
     <section class="border-t border-slate-100 bg-navy-50 py-12">
         <div class="container-page">
-            <h2 class="text-xl font-extrabold text-navy-900">Produk Rucisoft lainnya</h2>
+            <h2 class="text-xl font-extrabold text-navy-900">{{ $solution->category ? 'Produk terkait dan lainnya' : 'Produk Rucisoft lainnya' }}</h2>
             <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 @foreach ($others as $other)
                     <a href="{{ route('solutions.show', $other) }}" class="group flex flex-col rounded-2xl border border-transparent bg-white p-5 transition hover:border-brand-400 hover:shadow-lg">
@@ -126,6 +130,9 @@
                             @include('partials.product-logo', ['solution' => $other, 'class' => 'h-10'])
                         </div>
                         <p class="mt-4 text-sm font-bold text-navy-900">{{ $other->name }}</p>
+                        @if ($other->category)
+                            <p class="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-600">{{ $other->category->name }}</p>
+                        @endif
                         <p class="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500">{{ $other->tagline }}</p>
                         <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-600 group-hover:gap-2">
                             Lihat detail <x-heroicon-o-arrow-right class="size-3.5 transition-all" />

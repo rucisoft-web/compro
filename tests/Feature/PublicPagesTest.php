@@ -95,8 +95,8 @@ class PublicPagesTest extends TestCase
         $this->assertDatabaseMissing('solutions', ['slug' => 'ruciesg']);
         $this->assertDatabaseMissing('catalog_items', ['slug' => 'software-ruciesg']);
         $this->assertDatabaseHas('catalog_items', ['slug' => 'workshop-admin']);
-        $this->assertSame(6, Solution::count());
-        $this->assertSame(6, CatalogItem::where('type', 'software')->count());
+        $this->assertSame(20, Solution::count());
+        $this->assertSame(20, CatalogItem::where('type', 'software')->count());
     }
 
     public function test_bundled_images_are_used_when_no_external_image(): void

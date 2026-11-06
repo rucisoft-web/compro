@@ -20,6 +20,8 @@ class ContentSeeder extends Seeder
 
         $this->call(FunnelSeeder::class);
 
+        $this->call(SoftwareCatalogSeeder::class);
+
         foreach (['Perusahaan Terbuka', 'BUMN & BUMD', 'Pemerintah & BL', 'Rumah Sakit', 'Universitas'] as $i => $name) {
             ClientSegment::updateOrCreate(['name' => $name], ['sort_order' => $i + 1]);
         }

@@ -139,3 +139,15 @@ php artisan optimize:clear && php artisan optimize
 ```
 
 `SocialPostSeeder` menambahkan 6 artikel (satu per produk) beserta infografis dan screenshot aplikasi, dan langsung menampilkannya di menu **Artikel** website (rucisoft.id/artikel). Matikan "Tampilkan di menu Artikel website" di admin untuk menyembunyikan artikel. Artikel yang statusnya sudah bukan draf tidak akan ditimpa bila seeder dijalankan ulang.
+
+## Kategori software dan produk *.rucisoft.id (November 2026)
+
+```bash
+cd ~/compro
+git pull
+php artisan migrate --force
+php artisan db:seed --class=SoftwareCatalogSeeder --force
+php artisan optimize:clear && php artisan optimize
+```
+
+`SoftwareCatalogSeeder` membuat 7 kategori software (Strategi & Kinerja; Tata Kelola, Risiko & Kepatuhan; Aset & Fasilitas; Proyek & Layanan TI; Pelanggan, Hotel & Ritel; Klinik & Kantor Profesi; Edisi Klien) dan menambahkan 14 produk baru dari subdomain rucisoft.id. Produk yang sudah ada tidak ditimpa; hanya diberi kategori bila belum punya. Kategori dikelola di admin: **Konten → Kategori Software**, dan setiap produk dipilih kategorinya di **Konten → Solusi**. Beranda menampilkan produk per kategori dengan tombol saring.

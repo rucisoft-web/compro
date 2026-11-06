@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class SolutionsTable
@@ -25,6 +26,10 @@ class SolutionsTable
                 TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),
+                TextColumn::make('category.name')
+                    ->label('Kategori')
+                    ->badge()
+                    ->sortable(),
                 TextColumn::make('tagline')
                     ->label('Deskripsi singkat')
                     ->limit(60),
@@ -33,6 +38,11 @@ class SolutionsTable
                     ->counts('catalogItems'),
                 ToggleColumn::make('is_active')
                     ->label('Aktif'),
+            ])
+            ->filters([
+                SelectFilter::make('software_category_id')
+                    ->label('Kategori')
+                    ->relationship('category', 'name'),
             ])
             ->recordActions([
                 EditAction::make(),

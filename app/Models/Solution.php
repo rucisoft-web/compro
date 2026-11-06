@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,7 +36,7 @@ class Solution extends Model
     ];
 
     protected $fillable = [
-        'name', 'slug', 'tagline', 'problem_statement', 'description', 'features', 'pilot_scope', 'icon', 'logo', 'logo_url',
+        'software_category_id', 'name', 'slug', 'tagline', 'problem_statement', 'description', 'features', 'pilot_scope', 'icon', 'logo', 'logo_url',
         'image', 'image_url', 'website_url', 'sort_order', 'is_active',
     ];
 
@@ -46,6 +47,11 @@ class Solution extends Model
             'pilot_scope' => 'array',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(SoftwareCategory::class, 'software_category_id');
     }
 
     public function catalogItems(): HasMany
@@ -92,7 +98,7 @@ class Solution extends Model
 
     public function fallbackLogoUrl(): ?string
     {
-        return self::bundledAsset($this->slug.'-mark.svg');
+        return self::bundledAsset($this->slug.'-mark');
     }
 
     /**
@@ -109,11 +115,20 @@ class Solution extends Model
 
     public function fallbackImageUrl(): ?string
     {
-        return self::bundledAsset($this->slug.'-cover.svg');
+        return self::bundledAsset($this->slug.'-cover');
     }
 
-    private static function bundledAsset(string $file): ?string
+    /**
+     * A real screenshot (jpg/png) wins over the drawn svg placeholder.
+     */
+    private static function bundledAsset(string $name): ?string
     {
-        return is_file(public_path('images/products/'.$file)) ? asset('images/products/'.$file) : null;
+        foreach (['jpg', 'png', 'svg'] as $ext) {
+            if (is_file(public_path("images/products/{$name}.{$ext}"))) {
+                return asset("images/products/{$name}.{$ext}");
+            }
+        }
+
+        return null;
     }
 }

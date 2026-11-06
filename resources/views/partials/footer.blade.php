@@ -1,4 +1,4 @@
-@php($footerSolutions = \App\Models\Solution::active()->get(['name', 'slug']))
+@php($footerCategories = \App\Models\SoftwareCategory::withProducts(\App\Models\Solution::active()->get(['id', 'software_category_id', 'name', 'slug'])))
 <footer id="kontak" class="bg-navy-950 text-slate-300">
     <div class="container-page grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
         <div>
@@ -13,10 +13,10 @@
         </div>
 
         <div>
-            <p class="mb-4 text-sm font-bold text-white">Solusi</p>
+            <p class="mb-4 text-sm font-bold text-white">Produk</p>
             <ul class="space-y-2 text-sm">
-                @foreach ($footerSolutions as $s)
-                    <li><a href="{{ route('solutions.show', $s) }}" class="hover:text-brand-400">{{ $s->name }}</a></li>
+                @foreach ($footerCategories as $c)
+                    <li><a href="{{ route('home') }}#kategori-{{ $c->slug }}" class="hover:text-brand-400">{{ $c->name }}</a> <span class="text-slate-500">({{ $c->items->count() }})</span></li>
                 @endforeach
             </ul>
         </div>
