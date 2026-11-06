@@ -27,13 +27,30 @@ class SoftwareCategoryTest extends TestCase
         $this->assertSame(0, Solution::whereNull('software_category_id')->count());
         $this->assertSame(7, SoftwareCategory::count());
 
-        foreach (['akredia', 'aset', 'blu', 'bsc', 'gpch-bsc', 'gpch-crm', 'gpch-ifm', 'izinara', 'kinera', 'medika',
+        foreach (['akredia', 'aset', 'blu', 'bsc', 'izinara', 'kinera', 'medika',
             'mufakat', 'notaria', 'pranata', 'promise', 'rasentra', 'rekana', 'setia', 'siaga', 'simpul'] as $sub) {
             $this->assertTrue(
                 Solution::where('website_url', "https://{$sub}.rucisoft.id/")->exists(),
                 "{$sub}.rucisoft.id is missing",
             );
         }
+    }
+
+    public function test_client_name_is_not_published(): void
+    {
+        $this->assertSame(3, Solution::where('slug', 'like', '%-hotel-konvensi')->whereNull('website_url')->count());
+        $this->get('/')->assertOk()->assertDontSee('Pasundan')->assertDontSee('GPCH')->assertDontSee('gpch-');
+        $this->get('/solusi/crm-hotel-konvensi')->assertOk()->assertDontSee('Pasundan')->assertDontSee('gpch');
+    }
+
+    public function test_seeder_removes_products_seeded_under_the_client_name(): void
+    {
+        Solution::where('slug', 'crm-hotel-konvensi')->update(['slug' => 'gpch-crm', 'name' => 'CRM GPCH']);
+
+        $this->seed(SoftwareCatalogSeeder::class);
+
+        $this->assertDatabaseMissing('solutions', ['slug' => 'gpch-crm']);
+        $this->assertDatabaseHas('solutions', ['slug' => 'crm-hotel-konvensi', 'website_url' => null]);
     }
 
     public function test_seeder_keeps_admin_edits_and_chosen_category(): void

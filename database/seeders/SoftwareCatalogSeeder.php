@@ -18,6 +18,12 @@ use Illuminate\Support\Facades\DB;
  */
 class SoftwareCatalogSeeder extends Seeder
 {
+    private const RENAMED = [
+        'gpch-bsc' => 'bsc-hotel-konvensi',
+        'gpch-crm' => 'crm-hotel-konvensi',
+        'gpch-ifm' => 'ifm-hotel-konvensi',
+    ];
+
     public function run(): void
     {
         DB::transaction(function () {
@@ -33,6 +39,14 @@ class SoftwareCatalogSeeder extends Seeder
                 foreach ($members as $productSlug) {
                     Solution::where('slug', $productSlug)->whereNull('software_category_id')
                         ->update(['software_category_id' => $categories[$slug]->id]);
+                }
+            }
+
+            // Early runs used the client's name; the presentation is still in progress.
+            foreach (self::RENAMED as $old => $new) {
+                if (! Solution::where('slug', $new)->exists()) {
+                    Solution::where('slug', $old)->delete();
+                    CatalogItem::where('slug', 'software-'.$old)->delete();
                 }
             }
 
@@ -100,14 +114,12 @@ class SoftwareCatalogSeeder extends Seeder
                 ['ruci-medika', 'ruci-notaria']],
             ['edisi-klien', 'Edisi Klien', 'heroicon-o-building-office-2',
                 'Aplikasi yang disesuaikan dan dijalankan untuk satu klien, sebagai contoh implementasi Rucisoft di lapangan.',
-                ['gpch-bsc', 'gpch-crm', 'gpch-ifm']],
+                ['bsc-hotel-konvensi', 'crm-hotel-konvensi', 'ifm-hotel-konvensi']],
         ];
     }
 
     private function products(): array
     {
-        $gpchLogo = 'https://gpch-crm.rucisoft.id/images/logo-gpch.png';
-
         return [
             [
                 'slug' => 'ruci-bsc-blu',
@@ -340,13 +352,13 @@ class SoftwareCatalogSeeder extends Seeder
                 'website_url' => 'https://rasentra.rucisoft.id/',
             ],
             [
-                'slug' => 'gpch-bsc',
+                'slug' => 'bsc-hotel-konvensi',
                 'category' => 'edisi-klien',
-                'name' => 'BSC GPCH',
+                'name' => 'BSC Hotel Konvensi',
                 'icon' => 'heroicon-o-presentation-chart-line',
-                'tagline' => 'Ruci BSC Professional untuk Grand Pasundan Convention Hotel.',
+                'tagline' => 'Edisi Ruci BSC Professional untuk sebuah hotel konvensi.',
                 'problem' => 'Strategi dan KPI hotel perlu dipantau per perusahaan dan per perioda, dengan data yang bisa diunggah dari Excel.',
-                'summary' => 'Balanced Scorecard multi-perusahaan untuk Grand Pasundan Convention Hotel, dengan impor Excel dan alur input, verifikasi, dan persetujuan.',
+                'summary' => 'Balanced Scorecard multi-perusahaan untuk sebuah hotel konvensi, dengan impor Excel dan alur input, verifikasi, dan persetujuan.',
                 'features' => [
                     'Balanced Scorecard multi-perusahaan',
                     'Impor dan ekspor data dari Excel',
@@ -355,19 +367,18 @@ class SoftwareCatalogSeeder extends Seeder
                     'Pengingat siklus otomatis',
                     'Jejak audit',
                 ],
-                'description' => '<p>BSC GPCH adalah edisi Ruci BSC Professional yang dijalankan untuk Grand Pasundan Convention Hotel. Setiap perusahaan punya data, perioda, admin, dan pengguna sendiri, dan datanya dapat diunggah dari Excel dengan pratinjau sebelum diproses.</p>'
+                'description' => '<p>BSC Hotel Konvensi adalah edisi Ruci BSC Professional yang dijalankan untuk sebuah hotel konvensi. Setiap perusahaan punya data, perioda, admin, dan pengguna sendiri, dan datanya dapat diunggah dari Excel dengan pratinjau sebelum diproses.</p>'
                     .'<p>Aplikasi ini hanya untuk pengguna klien; organisasi lain bisa memakai Ruci BSC dengan pengaturan serupa.</p>',
-                'logo_url' => $gpchLogo,
-                'website_url' => 'https://gpch-bsc.rucisoft.id/',
+                'website_url' => null,
             ],
             [
-                'slug' => 'gpch-crm',
+                'slug' => 'crm-hotel-konvensi',
                 'category' => 'edisi-klien',
-                'name' => 'CRM GPCH',
+                'name' => 'CRM Hotel Konvensi',
                 'icon' => 'heroicon-o-user-group',
-                'tagline' => 'Customer Relationship Management untuk Grand Pasundan Convention Hotel.',
+                'tagline' => 'Customer Relationship Management untuk sebuah hotel konvensi.',
                 'problem' => 'Data tamu dan acara di sistem hotel belum diolah menjadi segmen, loyalitas, dan tindak lanjut penjualan.',
-                'summary' => 'CRM hotel untuk Grand Pasundan Convention Hotel: KPI okupansi, tamu 360, segmentasi, loyalitas, kampanye WhatsApp, dan pipeline acara.',
+                'summary' => 'CRM untuk sebuah hotel konvensi: KPI okupansi, tamu 360, segmentasi, loyalitas, kampanye WhatsApp, dan pipeline acara.',
                 'features' => [
                     'KPI okupansi, ADR, dan RevPAR',
                     'Tamu 360 dan skor RFM',
@@ -376,29 +387,27 @@ class SoftwareCatalogSeeder extends Seeder
                     'Pipeline acara dan deteksi ruang bentrok',
                     'Keluhan dan NPS',
                 ],
-                'description' => '<p>CRM GPCH mengolah data tamu dan banquet dari sistem hotel menjadi ringkasan eksekutif, profil tamu 360, segmentasi, program loyalitas, kampanye WhatsApp yang hanya menjangkau tamu yang setuju, dan pipeline acara.</p>'
+                'description' => '<p>CRM Hotel Konvensi mengolah data tamu dan banquet dari sistem hotel menjadi ringkasan eksekutif, profil tamu 360, segmentasi, program loyalitas, kampanye WhatsApp yang hanya menjangkau tamu yang setuju, dan pipeline acara.</p>'
                     .'<p>Aplikasi ini hanya untuk pengguna klien; hotel lain bisa memakai Ruci SETIA dengan fitur serupa.</p>',
-                'logo_url' => $gpchLogo,
-                'website_url' => 'https://gpch-crm.rucisoft.id/',
+                'website_url' => null,
             ],
             [
-                'slug' => 'gpch-ifm',
+                'slug' => 'ifm-hotel-konvensi',
                 'category' => 'edisi-klien',
-                'name' => 'IFM GPCH',
+                'name' => 'IFM Hotel Konvensi',
                 'icon' => 'heroicon-o-building-office-2',
-                'tagline' => 'Integrated Facility Management untuk Grand Pasundan Convention Hotel.',
+                'tagline' => 'Integrated Facility Management untuk sebuah hotel konvensi.',
                 'problem' => 'Aset, pemeliharaan, dan gangguan fasilitas hotel perlu dipantau dalam satu sistem.',
-                'summary' => 'Pengelolaan fasilitas terpadu untuk Grand Pasundan Convention Hotel: aset, pemeliharaan, dan gangguan.',
+                'summary' => 'Pengelolaan fasilitas terpadu untuk sebuah hotel konvensi: aset, pemeliharaan, dan gangguan.',
                 'features' => [
                     'Register aset hotel',
                     'Pemeliharaan preventif',
                     'Laporan dan penanganan gangguan',
                     'Dasbor untuk pimpinan',
                 ],
-                'description' => '<p>IFM GPCH adalah sistem Integrated Facility Management yang dijalankan untuk Grand Pasundan Convention Hotel, untuk mengelola aset, pemeliharaan, dan gangguan fasilitas.</p>'
+                'description' => '<p>IFM Hotel Konvensi adalah sistem Integrated Facility Management yang dijalankan untuk sebuah hotel konvensi, untuk mengelola aset, pemeliharaan, dan gangguan fasilitas.</p>'
                     .'<p>Aplikasi ini hanya untuk pengguna klien; organisasi lain bisa memakai Ruci Asset Care atau SIAGA.</p>',
-                'logo_url' => $gpchLogo,
-                'website_url' => 'https://gpch-ifm.rucisoft.id/',
+                'website_url' => null,
             ],
         ];
     }
