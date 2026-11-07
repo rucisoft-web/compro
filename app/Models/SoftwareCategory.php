@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Schema;
 
 class SoftwareCategory extends Model
 {
@@ -30,6 +31,13 @@ class SoftwareCategory extends Model
      */
     public static function withProducts(Collection $solutions): Collection
     {
+        // Keeps every page up when the code is deployed before `php artisan migrate`.
+        if (! Schema::hasTable('software_categories')) {
+            return $solutions->isEmpty() ? new Collection : new Collection([
+                (new self(['name' => 'Semua produk', 'slug' => 'semua-produk']))->setAttribute('items', $solutions->values()),
+            ]);
+        }
+
         $byCategory = $solutions->groupBy(fn (Solution $s) => (int) $s->software_category_id);
 
         $groups = static::orderBy('sort_order')->orderBy('name')->get()

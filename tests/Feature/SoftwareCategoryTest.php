@@ -8,6 +8,7 @@ use App\Models\User;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\SoftwareCatalogSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class SoftwareCategoryTest extends TestCase
@@ -51,6 +52,16 @@ class SoftwareCategoryTest extends TestCase
 
         $this->assertDatabaseMissing('solutions', ['slug' => 'gpch-crm']);
         $this->assertDatabaseHas('solutions', ['slug' => 'crm-hotel-konvensi', 'website_url' => null]);
+    }
+
+    public function test_pages_still_work_before_the_migration_runs(): void
+    {
+        Schema::table('solutions', fn ($t) => $t->dropConstrainedForeignId('software_category_id'));
+        Schema::drop('software_categories');
+
+        $this->get('/')->assertOk()->assertSee('Ruci BSC');
+        $this->get('/solusi/ruci-bsc')->assertOk();
+        $this->get('/artikel')->assertOk();
     }
 
     public function test_seeder_keeps_admin_edits_and_chosen_category(): void
